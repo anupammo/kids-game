@@ -13,756 +13,266 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <style>
-      :root {
-        --primary: #4361ee;
-        --secondary: #3f37c9;
-        --success: #4cc9f0;
-        --danger: #f72585;
-        --warning: #f9c74f;
-        --light: #f8f9fa;
-        --dark: #212529;
-        --pre-primary: #ff9eaa;
-        --class1: #4cc9f0;
-        --class2: #9d4edd;
-        --class3: #f9c74f;
-        --class4: #90be6d;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        background: linear-gradient(135deg, #4cc9f0, #4361ee);
-        min-height: 100vh;
-        min-height: 100dvh;
-        font-family: "Comic Sans MS", "Marker Felt", "Chalkboard SE", cursive,
-          sans-serif;
-        overflow-x: hidden;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .game-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-        max-width: 900px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 2rem;
-        max-height: 95vh;
-        overflow-y: auto;
-      }
-
-      .header {
-        background: linear-gradient(to right, var(--primary), var(--secondary));
-        color: white;
-        padding: 1.5rem;
-        border-radius: 15px 15px 0 0;
-        margin: -2rem -2rem 1.5rem -2rem;
-        text-align: center;
-        position: relative;
-      }
-
-      .header h1 {
-        font-weight: 700;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        margin: 0;
-        font-size: 1.8rem;
-      }
-
-      .header p {
-        font-size: 1.1rem;
-        margin-bottom: 0;
-      }
-
-      .character {
-        position: absolute;
-        bottom: -30px;
-        right: 20px;
-        width: 80px;
-        height: 80px;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="%23F9C74F"/><circle cx="40" cy="35" r="3" fill="%23333"/><circle cx="60" cy="35" r="3" fill="%23333"/><path d="M45,50 Q50,55 55,50" stroke="%23333" stroke-width="2" fill="none"/></svg>')
-          no-repeat;
-        background-size: contain;
-        z-index: 10;
-      }
-
-      .level-card {
-        border-radius: 15px;
-        padding: 1.2rem;
-        text-align: center;
-        margin: 10px 0;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-        border: none;
-        height: 100%;
-      }
-
-      .level-card:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      }
-
-      .level-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-      }
-
-      .pre-primary {
-        background-color: var(--pre-primary);
-      }
-      .pre-primary::before {
-        background: linear-gradient(to right, #ff6b7c, #ff9eaa);
-      }
-
-      .class1 {
-        background-color: var(--class1);
-      }
-      .class1::before {
-        background: linear-gradient(to right, #00a8e8, #4cc9f0);
-      }
-
-      .class2 {
-        background-color: var(--class2);
-      }
-      .class2::before {
-        background: linear-gradient(to right, #7b2cbf, #9d4edd);
-      }
-
-      .class3 {
-        background-color: var(--class3);
-      }
-      .class3::before {
-        background: linear-gradient(to right, #f8961e, #f9c74f);
-      }
-
-      .class4 {
-        background-color: var(--class4);
-      }
-      .class4::before {
-        background: linear-gradient(to right, #43aa8b, #90be6d);
-      }
-
-      .table-btn {
-        background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-        border: none;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        margin: 8px;
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: var(--dark);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-      }
-
-      .table-btn:hover {
-        transform: translateY(-3px) scale(1.1);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .table-btn.selected {
-        background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
-        transform: scale(1.1);
-        box-shadow: 0 0 20px rgba(67, 97, 238, 0.5);
-      }
-
-      .game-screen {
-        display: none;
-      }
-
-      .question-box {
-        background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
-        border-radius: 15px;
-        padding: 1.5rem;
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-        margin: 1rem 0;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        min-height: 130px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-      }
-
-      .timer-container {
-        position: absolute;
-        top: -12px;
-        right: -12px;
-        background: var(--danger);
-        color: white;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        border: 3px solid white;
-        z-index: 5;
-      }
-
-      .options-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin: 1.2rem 0;
-      }
-
-      .option-btn {
-        background: white;
-        border: 3px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 0.8rem;
-        font-size: 1.5rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .option-btn:hover {
-        transform: translateY(-3px);
-        border-color: var(--primary);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .option-btn.correct {
-        background: linear-gradient(to bottom, #56ab2f, #a8e063);
-        color: white;
-        border-color: #56ab2f;
-      }
-
-      .option-btn.wrong {
-        background: linear-gradient(to bottom, #ff512f, #dd2476);
-        color: white;
-        border-color: #ff512f;
-      }
-
-      .progress-container {
-        margin: 1.2rem 0;
-      }
-
-      .progress {
-        height: 22px;
-        border-radius: 12px;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .progress-bar {
-        background: linear-gradient(to right, #4facfe, #00f2fe);
-      }
-
-      .stats {
-        display: flex;
-        justify-content: space-around;
-        font-size: 1.1rem;
-        margin: 0.8rem 0;
-        background: #f0f8ff;
-        padding: 0.7rem;
-        border-radius: 10px;
-        font-weight: bold;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .stats > div {
-        min-width: 100px;
-        text-align: center;
-      }
-
-      .result-screen {
-        display: none;
-        text-align: center;
-        padding: 1.5rem;
-      }
-
-      .result-icon {
-        font-size: 5rem;
-        color: var(--primary);
-        margin: 0.8rem 0;
-        animation: bounce 1s infinite alternate;
-      }
-
-      @keyframes bounce {
-        from {
-          transform: translateY(0);
-        }
-        to {
-          transform: translateY(-15px);
-        }
-      }
-
-      .confetti {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        background-color: #f00;
-        animation: fall linear forwards;
-      }
-
-      @keyframes fall {
-        to {
-          transform: translateY(100vh) rotate(360deg);
-          opacity: 0;
-        }
-      }
-
-      .btn-custom {
-        background: linear-gradient(to right, var(--primary), var(--secondary));
-        border: none;
-        color: white;
-        padding: 0.7rem 1.5rem;
-        font-size: 1.1rem;
-        border-radius: 50px;
-        font-weight: bold;
-        margin: 0.4rem;
-        transition: all 0.3s ease;
-        min-width: 180px;
-      }
-
-      .btn-custom:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .btn-custom:active {
-        transform: translateY(1px);
-      }
-
-      .star {
-        color: gold;
-        font-size: 1.8rem;
-        margin: 0 3px;
-        text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
-      }
-
-      .animate-bounce {
-        animation: bounce 0.5s ease infinite alternate;
-      }
-
-      .animate-pulse {
-        animation: pulse 1.5s infinite;
-      }
-
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.03);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      .level-icon {
-        font-size: 2.2rem;
-        margin-bottom: 8px;
-      }
-
-      .level-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-
-      .level-info {
-        font-size: 0.9rem;
-        opacity: 0.9;
-      }
-
-      .timer-low {
-        animation: pulse 0.8s infinite;
-        background: #ff6b6b !important;
-      }
-
-      .screen {
-        display: none;
-      }
-
-      .active-screen {
-        display: block;
-      }
-
-      .btn-group {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .result-content {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 1.5rem;
-        max-width: 400px;
-        margin: 1rem auto;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      @media (max-width: 768px) {
-        .game-container {
-          padding: 1.5rem;
-          max-height: 95vh;
-        }
-
-        .header {
-          padding: 1rem;
-          margin: -1.5rem -1.5rem 1.2rem -1.5rem;
-        }
-
-        .header h1 {
-          font-size: 1.5rem;
-        }
-
-        .header p {
-          font-size: 0.95rem;
-        }
-
-        .character {
-          width: 60px;
-          height: 60px;
-          bottom: -25px;
-          right: 15px;
-        }
-
-        .table-btn {
-          width: 50px;
-          height: 50px;
-          font-size: 1.2rem;
-          margin: 5px;
-        }
-
-        .question-box {
-          font-size: 1.7rem;
-          min-height: 110px;
-          padding: 1.2rem;
-        }
-
-        .options-container {
-          grid-template-columns: 1fr;
-        }
-
-        .timer-container {
-          width: 50px;
-          height: 50px;
-          font-size: 1.3rem;
-          top: -10px;
-          right: -10px;
-        }
-
-        .btn-custom {
-          min-width: 160px;
-          padding: 0.6rem 1.2rem;
-          font-size: 1rem;
-        }
-
-        .result-icon {
-          font-size: 4rem;
-        }
-
-        .result-content {
-          padding: 1rem;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .game-container {
-          padding: 1rem;
-        }
-
-        .header {
-          margin: -1rem -1rem 1rem -1rem;
-        }
-
-        .level-card {
-          padding: 1rem;
-        }
-
-        .question-box {
-          font-size: 1.5rem;
-          min-height: 100px;
-        }
-
-        .option-btn {
-          font-size: 1.3rem;
-          padding: 0.6rem;
-        }
-
-        .stats {
-          font-size: 1rem;
-        }
-
-        .btn-custom {
-          min-width: 140px;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container py-2">
-      <div class="game-container">
-        <div class="header position-relative">
-          <h1><i class="fas fa-calculator me-2"></i> Math Tables Adventure</h1>
-          <p class="mb-0">Learn multiplication tables with timed levels!</p>
-          <div class="character"></div>
-        </div>
-
-        <!-- Grade Selection Screen -->
-        <div id="gradeScreen" class="screen active-screen">
-          <div class="mb-3">
-            <h2 class="text-primary text-center">Choose Your Grade Level</h2>
-            <p class="lead text-center">
-              Each level has different time limits to challenge your math
-              skills!
-            </p>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4 col-12 mb-3">
-              <div class="level-card pre-primary" data-level="0">
-                <div class="level-icon"><i class="fas fa-baby"></i></div>
-                <div class="level-title">Pre-Primary</div>
-                <div class="level-info">30 seconds per question</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-12 mb-3">
-              <div class="level-card class1" data-level="1">
-                <div class="level-icon"><i class="fas fa-apple-alt"></i></div>
-                <div class="level-title">Class 1</div>
-                <div class="level-info">25 seconds per question</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-12 mb-3">
-              <div class="level-card class2" data-level="2">
-                <div class="level-icon"><i class="fas fa-book"></i></div>
-                <div class="level-title">Class 2</div>
-                <div class="level-info">20 seconds per question</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-12 mb-3">
-              <div class="level-card class3" data-level="3">
-                <div class="level-icon"><i class="fas fa-pencil-alt"></i></div>
-                <div class="level-title">Class 3</div>
-                <div class="level-info">15 seconds per question</div>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-12 mb-3">
-              <div class="level-card class4" data-level="4">
-                <div class="level-icon">
-                  <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="level-title">Class 4</div>
-                <div class="level-info">10 seconds per question</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table Selection Screen -->
-        <div id="welcomeScreen" class="screen">
-          <div class="mb-3">
-            <h2 class="text-primary text-center">
-              Select Multiplication Table
-            </h2>
-            <p class="lead text-center">
-              You've selected:
-              <span id="selectedGrade" class="fw-bold text-primary"
-                >Pre-Primary</span
-              >
-              (<span id="timeInfo">30s</span> per question)
-            </p>
-          </div>
-
-          <div class="d-flex flex-wrap justify-content-center mb-3">
-            <button class="table-btn" data-table="random">🎲</button>
-            <button class="table-btn" data-table="1">1</button>
-            <button class="table-btn" data-table="2">2</button>
-            <button class="table-btn" data-table="3">3</button>
-            <button class="table-btn" data-table="4">4</button>
-            <button class="table-btn" data-table="5">5</button>
-            <button class="table-btn" data-table="6">6</button>
-            <button class="table-btn" data-table="7">7</button>
-            <button class="table-btn" data-table="8">8</button>
-            <button class="table-btn" data-table="9">9</button>
-            <button class="table-btn" data-table="10">10</button>
-            <button class="table-btn" data-table="11">11</button>
-            <button class="table-btn" data-table="12">12</button>
-            <button class="table-btn" data-table="13">13</button>
-            <button class="table-btn" data-table="14">14</button>
-            <button class="table-btn" data-table="15">15</button>
-            <button class="table-btn" data-table="16">16</button>
-            <button class="table-btn" data-table="17">17</button>
-            <button class="table-btn" data-table="18">18</button>
-            <button class="table-btn" data-table="19">19</button>
-            <button class="table-btn" data-table="20">20</button>
-          </div>
-
-          <div class="alert alert-info text-center">
-            <i class="fas fa-lightbulb me-2"></i> <strong>Tip:</strong> Start
-            with tables you find challenging!
-          </div>
-
-          <div class="text-center mt-2">
-            <button
-              id="changeLevelBtn"
-              class="btn-custom"
-              style="background: linear-gradient(to right, #6a11cb, #2575fc)"
-            >
-              <i class="fas fa-exchange-alt me-2"></i> Change Grade Level
-            </button>
-          </div>
-        </div>
-
-        <!-- Game Screen -->
-        <div id="gameScreen" class="screen">
-          <h2 class="text-center mb-0">
-            Practice Table of
-            <span id="currentTable" class="text-primary">5</span>
-          </h2>
-          <p class="text-center mb-3">
-            Grade Level:
-            <span id="currentLevel" class="fw-bold">Pre-Primary</span> (<span
-              id="currentTimeInfo"
-              >30s</span
-            >
-            per question)
-          </p>
-
-          <div class="question-box">
-            <div class="timer-container" id="timer">30</div>
-            <span id="question">5 × 3 = ?</span>
-          </div>
-
-          <div class="options-container" id="optionsContainer">
-            <!-- Options will be generated here -->
-          </div>
-
-          <div class="text-center mt-3">
-            <button id="nextBtn" class="btn-custom" disabled>
-              Next Question <i class="fas fa-arrow-right ms-2"></i>
-            </button>
-          </div>
-
-          <div class="progress-container">
-            <div class="d-flex justify-content-between mb-2">
-              <span>Progress</span>
-              <span><span id="currentQuestion">1</span>/10</span>
-            </div>
-            <div class="progress">
-              <div
-                id="progressBar"
-                class="progress-bar"
-                role="progressbar"
-                style="width: 10%"
-              ></div>
-            </div>
-          </div>
-
-          <div class="stats">
-            <div>
-              <i class="fas fa-check-circle text-success me-2"></i>
-              Correct: <span id="correctCount">0</span>
-            </div>
-            <div>
-              <i class="fas fa-trophy text-warning me-2"></i>
-              Score: <span id="score">0</span>
-            </div>
-            <div>
-              <i class="fas fa-clock text-info me-2"></i>
-              Time: <span id="timeLeft">0s</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Result Screen -->
-        <div id="resultScreen" class="screen">
-          <div class="result-icon">
-            <i class="fas fa-trophy"></i>
-          </div>
-          <h2 class="text-primary">Congratulations!</h2>
-          <h3>
-            You completed the
-            <span id="completedTable" class="text-primary">5</span> times table!
-          </h3>
-          <p class="mb-3">
-            Grade Level:
-            <span id="completedLevel" class="fw-bold">Pre-Primary</span>
-          </p>
-
-          <div class="result-content">
-            <h4>Your Score</h4>
-            <div class="display-4 text-primary fw-bold my-3">
-              <span id="finalScore">0</span>/100
-            </div>
-            <div class="stars my-3">
-              <i class="star fas fa-star"></i>
-              <i class="star fas fa-star"></i>
-              <i class="star fas fa-star"></i>
-              <i class="star fas fa-star"></i>
-              <i class="star fas fa-star"></i>
-            </div>
-            <div>Correct Answers: <span id="finalCorrect">0</span>/10</div>
-            <div class="mt-2">
-              Average Time: <span id="avgTime">0</span> seconds
-            </div>
-          </div>
-
-          <div class="btn-group mt-3">
-            <button id="restartBtn" class="btn-custom">
-              <i class="fas fa-redo me-2"></i> Play Again
-            </button>
-            <button
-              id="newTableBtn"
-              class="btn-custom"
-              style="background: linear-gradient(to right, #ff9a9e, #fad0c4)"
-            >
-              <i class="fas fa-random me-2"></i> New Table
-            </button>
-            <button
-              id="changeLevelAfterBtn"
-              class="btn-custom"
-              style="background: linear-gradient(to right, #6a11cb, #2575fc)"
-            >
-              <i class="fas fa-exchange-alt me-2"></i> Change Grade
-            </button>
+    <header class="text-white">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="text-center h3"><i class="fas fa-calculator me-2"></i> Math Tables Adventure</h1>
+            <p class="text-center mb-0">Learn multiplication tables with timed levels!</p>
+            <!-- <div class="character"></div> -->
+            <!-- <div class="position-relative"></div> -->
           </div>
         </div>
       </div>
+    </header>
+    <section class="mt-3">
+      <div class="container py-2">
+        <div class="game-container">
 
-      <footer class="text-center text-white mt-3 py-2">
-        <p>
-          Made with <i class="fas fa-heart text-danger"></i> for kids to learn
-          math!
-        </p>
-      </footer>
-    </div>
+          <!-- Grade Selection Screen -->
+          <div id="gradeScreen" class="screen active-screen">
+            <div class="mb-3">
+              <h2 class="text-primary text-center">Choose Your Grade Level</h2>
+              <p class="lead text-center">
+                Each level has different time limits to challenge your math
+                skills!
+              </p>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 col-12 mb-3">
+                <div class="level-card pre-primary" data-level="0">
+                  <div class="level-icon"><i class="fas fa-baby"></i></div>
+                  <div class="level-title">Pre-Primary</div>
+                  <div class="level-info">30 seconds per question</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-12 mb-3">
+                <div class="level-card class1" data-level="1">
+                  <div class="level-icon"><i class="fas fa-apple-alt"></i></div>
+                  <div class="level-title">Class 1</div>
+                  <div class="level-info">25 seconds per question</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-12 mb-3">
+                <div class="level-card class2" data-level="2">
+                  <div class="level-icon"><i class="fas fa-book"></i></div>
+                  <div class="level-title">Class 2</div>
+                  <div class="level-info">20 seconds per question</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-12 mb-3">
+                <div class="level-card class3" data-level="3">
+                  <div class="level-icon"><i class="fas fa-pencil-alt"></i></div>
+                  <div class="level-title">Class 3</div>
+                  <div class="level-info">15 seconds per question</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-12 mb-3">
+                <div class="level-card class4" data-level="4">
+                  <div class="level-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                  </div>
+                  <div class="level-title">Class 4</div>
+                  <div class="level-info">10 seconds per question</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Selection Screen -->
+          <div id="welcomeScreen" class="screen">
+            <div class="mb-3">
+              <h2 class="text-primary text-center h3">
+                Select Multiplication Table
+              </h2>
+              <p class="lead text-center fs-6">
+                You've selected:
+                <span id="selectedGrade" class="fw-bold text-primary"
+                  >Pre-Primary</span
+                >
+                (<span id="timeInfo">30s</span> per question)
+              </p>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center mb-3">
+              <button class="table-btn" data-table="1">1</button>
+              <button class="table-btn" data-table="2">2</button>
+              <button class="table-btn" data-table="3">3</button>
+              <button class="table-btn" data-table="4">4</button>
+              <button class="table-btn" data-table="5">5</button>
+              <button class="table-btn" data-table="6">6</button>
+              <button class="table-btn" data-table="7">7</button>
+              <button class="table-btn" data-table="8">8</button>
+              <button class="table-btn" data-table="9">9</button>
+              <button class="table-btn" data-table="10">10</button>
+              <button class="table-btn" data-table="11">11</button>
+              <button class="table-btn" data-table="12">12</button>
+              <button class="table-btn" data-table="13">13</button>
+              <button class="table-btn" data-table="14">14</button>
+              <button class="table-btn" data-table="15">15</button>
+              <button class="table-btn" data-table="16">16</button>
+              <button class="table-btn" data-table="17">17</button>
+              <button class="table-btn" data-table="18">18</button>
+              <button class="table-btn" data-table="19">19</button>
+              <button class="table-btn" data-table="20">20</button>
+              <button class="table-btn" data-table="random">🎲</button>
+            </div>
+
+            <div class="text-center mt-2">
+              <button
+                id="changeLevelBtn"
+                class="btn-custom"
+                style="background: linear-gradient(to right, #6a11cb, #2575fc)"
+              >
+                <i class="fas fa-exchange-alt me-2"></i> Change Grade Level
+              </button>
+            </div>
+
+            <div class="alert text-success text-center mx-auto mb-0 py-2" style="width: fit-content;">
+              <i class="fas fa-lightbulb me-2"></i> <strong>Tip:</strong> Start
+              with tables you find challenging!
+            </div>
+          </div>
+
+          <!-- Game Screen -->
+          <div id="gameScreen" class="screen">
+
+            <div class="question-box py-2">
+              <div class="timer-container" id="timer">30</div>
+              <span class="d-block" id="question">5 × 3 = ?</span>
+            </div>
+
+            <div class="options-container" id="optionsContainer">
+              <!-- Options will be generated here -->
+            </div>
+
+            <div class="text-center mt-3">
+              <button id="nextBtn" class="btn-custom" disabled>
+                Next Question <i class="fas fa-arrow-right ms-2"></i>
+              </button>
+            </div>
+
+            <div class="progress-container">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Progress</span>
+                <span><span id="currentQuestion">1</span>/10</span>
+              </div>
+              <div class="progress">
+                <div
+                  id="progressBar"
+                  class="progress-bar"
+                  role="progressbar"
+                  style="width: 10%"
+                ></div>
+              </div>
+            </div>
+
+            <div class="stats">
+              <div>
+                <i class="fas fa-check-circle text-success me-2"></i>
+                Correct: <span id="correctCount">0</span>
+              </div>
+              <div>
+                <i class="fas fa-trophy text-warning me-2"></i>
+                Score: <span id="score">0</span>
+              </div>
+              <div>
+                <i class="fas fa-clock text-info me-2"></i>
+                Time: <span id="timeLeft">0s</span>
+              </div>
+            </div>
+            <hr class="d-block mx-auto w-50">
+            <h2 class="text-center h3 mb-0">
+              <span>Practice Table of</span>
+              <span id="currentTable" class="text-primary">5</span>
+            </h2>
+            <p class="text-center mb-3">
+              Grade Level:
+              <span id="currentLevel" class="fw-bold">Pre-Primary</span> (<span
+                id="currentTimeInfo"
+                >30s</span
+              >
+              per question)
+            </p>
+          </div>
+
+          <!-- Result Screen -->
+          <div id="resultScreen" class="screen">
+            <div class="result-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <h2 class="text-primary">Congratulations!</h2>
+            <h3>
+              You completed the
+              <span id="completedTable" class="text-primary">5</span> times table!
+            </h3>
+            <p class="mb-3">
+              Grade Level:
+              <span id="completedLevel" class="fw-bold">Pre-Primary</span>
+            </p>
+
+            <div class="result-content">
+              <h4>Your Score</h4>
+              <div class="display-4 text-primary fw-bold my-3">
+                <span id="finalScore">0</span>/100
+              </div>
+              <div class="stars my-3">
+                <i class="star fas fa-star"></i>
+                <i class="star fas fa-star"></i>
+                <i class="star fas fa-star"></i>
+                <i class="star fas fa-star"></i>
+                <i class="star fas fa-star"></i>
+              </div>
+              <div>Correct Answers: <span id="finalCorrect">0</span>/10</div>
+              <div class="mt-2">
+                Average Time: <span id="avgTime">0</span> seconds
+              </div>
+            </div>
+
+            <div class="btn-group mt-3">
+              <button id="restartBtn" class="btn-custom">
+                <i class="fas fa-redo me-2"></i> Play Again
+              </button>
+              <button
+                id="newTableBtn"
+                class="btn-custom"
+                style="background: linear-gradient(to right, #ff9a9e, #fad0c4)"
+              >
+                <i class="fas fa-random me-2"></i> New Table
+              </button>
+              <button
+                id="changeLevelAfterBtn"
+                class="btn-custom"
+                style="background: linear-gradient(to right, #6a11cb, #2575fc)"
+              >
+                <i class="fas fa-exchange-alt me-2"></i> Change Grade
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="pt-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <p>
+              Made with <i class="fas fa-heart text-danger"></i> for kids to learn
+              Math — <a target="_blank" class="text-white fw-bold" style="text-decoration: none;" href="https://anupammondal.in">Anupam Mondal</a>
+            </p>
+            <!-- <footer class="text-center text-white mt-3 py-2"></footer> -->
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -998,7 +508,7 @@
           nextBtn.disabled = false;
 
           // Show timeout message
-          questionSpan.innerHTML = `${questionSpan.textContent}<br><span class="text-danger" style="font-size: 1.2rem;">Time's up!</span>`;
+          questionSpan.innerHTML = `${questionSpan.textContent}<span class="d-block text-danger" style="font-size: 1.2rem;">Time's up!</span>`;
         }
 
         // Shuffle array (Fisher-Yates algorithm)
