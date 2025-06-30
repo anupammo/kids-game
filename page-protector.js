@@ -1,39 +1,4 @@
 // page-protector.js
-
-/**
- * Page Protection Library
- * 
- * This library provides multiple layers of protection against:
- * - Right-click context menu access
- * - Developer tools keyboard shortcuts
- * - View source functionality
- * - Developer tools detection
- * 
- * Usage:
- * 
- * // Initialize with default options
- * const protector = new PageProtector();
- * protector.init();
- * 
- * // Initialize with custom options
- * const protector = new PageProtector({
- *   disableRightClick: true,
- *   disableShortcuts: true,
- *   disableTextSelection: true,
- *   tamperDetection: true,
- *   obfuscate: true,
- *   tamperCheckInterval: 1000,
- *   tamperThreshold: 100,
- *   onContextMenuBlocked: function(e) { ... },
- *   onShortcutBlocked: function(shortcut) { ... },
- *   onDevToolsDetected: function() { ... }
- * });
- * protector.init();
- * 
- * // To remove protections
- * protector.destroy();
- */
-
 class PageProtector {
     constructor(options = {}) {
         // Default configuration
@@ -43,6 +8,7 @@ class PageProtector {
             disableTextSelection: true,
             tamperDetection: true,
             obfuscate: true,
+            showStatusIndicator: true,
             tamperCheckInterval: 1000,
             tamperThreshold: 100,
             onContextMenuBlocked: null,
@@ -63,6 +29,9 @@ class PageProtector {
         
         // Store interval ID for tamper detection
         this.tamperInterval = null;
+        
+        // Status indicator element
+        this.statusIndicator = null;
     }
     
     init() {
@@ -72,6 +41,9 @@ class PageProtector {
         if (this.config.disableTextSelection) this._disableTextSelection();
         if (this.config.tamperDetection) this._enableTamperDetection();
         if (this.config.obfuscate) this._obfuscateSource();
+        if (this.config.showStatusIndicator) this._createStatusIndicator();
+        
+        return this; // Return instance for method chaining
     }
     
     destroy() {
@@ -97,6 +69,11 @@ class PageProtector {
             clearInterval(this.tamperInterval);
             this.tamperInterval = null;
         }
+        
+        // Remove status indicator
+        if (this.statusIndicator && this.statusIndicator.parentNode) {
+            this.statusIndicator.parentNode.removeChild(this.statusIndicator);
+        }
     }
     
     _disableRightClick() {
@@ -105,6 +82,7 @@ class PageProtector {
             if (this.config.onContextMenuBlocked) {
                 this.config.onContextMenuBlocked(e);
             }
+            this._updateStatus('Context menu blocked');
         };
         document.addEventListener('contextmenu', this.listeners.contextmenu);
     }
@@ -117,6 +95,7 @@ class PageProtector {
                 if (this.config.onShortcutBlocked) {
                     this.config.onShortcutBlocked('F12');
                 }
+                this._updateStatus('F12 blocked');
                 return;
             }
             
@@ -126,6 +105,7 @@ class PageProtector {
                 if (this.config.onShortcutBlocked) {
                     this.config.onShortcutBlocked('Ctrl+Shift+I');
                 }
+                this._updateStatus('Ctrl+Shift+I blocked');
                 return;
             }
             
@@ -135,6 +115,7 @@ class PageProtector {
                 if (this.config.onShortcutBlocked) {
                     this.config.onShortcutBlocked('Ctrl+Shift+J');
                 }
+                this._updateStatus('Ctrl+Shift+J blocked');
                 return;
             }
             
@@ -144,6 +125,17 @@ class PageProtector {
                 if (this.config.onShortcutBlocked) {
                     this.config.onShortcutBlocked('Ctrl+U');
                 }
+                this._updateStatus('Ctrl+U blocked');
+                return;
+            }
+            
+            // Disable Ctrl+Shift+C (Chrome/Firefox element inspector)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                if (this.config.onShortcutBlocked) {
+                    this.config.onShortcutBlocked('Ctrl+Shift+C');
+                }
+                this._updateStatus('Ctrl+Shift+C blocked');
                 return;
             }
         };
@@ -156,6 +148,7 @@ class PageProtector {
                 if (this.config.onShortcutBlocked) {
                     this.config.onShortcutBlocked('Ctrl+U');
                 }
+                this._updateStatus('Ctrl+U blocked');
                 return false;
             }
         };
@@ -174,7 +167,13 @@ class PageProtector {
             const before = performance.now();
             
             // This will pause execution if dev tools are open
-            debugger;
+            try {
+                // Using a function constructor to bypass breakpoint detection
+                const debug = new Function("debugger;");
+                debug();
+            } catch (e) {
+                // Continue even if debugger statement is blocked
+            }
             
             const after = performance.now();
             
@@ -182,6 +181,7 @@ class PageProtector {
                 if (this.config.onDevToolsDetected) {
                     this.config.onDevToolsDetected();
                 }
+                this._updateStatus('Dev tools detected! Reloading...');
                 location.reload();
             }
         }, this.config.tamperCheckInterval);
@@ -191,4 +191,53 @@ class PageProtector {
         // Add a comment to the body for obfuscation
         document.body.innerHTML += '<!-- Source code protected by PageProtector.js -->';
     }
+    
+    _createStatusIndicator() {
+        // Create status indicator element
+        this.statusIndicator = document.createElement('div');
+        this.statusIndicator.id = 'page-protector-status';
+        this.statusIndicator.style.position = 'fixed';
+        this.statusIndicator.style.bottom = '10px';
+        this.statusIndicator.style.right = '10px';
+        this.statusIndicator.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this.statusIndicator.style.color = 'white';
+        this.statusIndicator.style.padding = '5px 10px';
+        this.statusIndicator.style.borderRadius = '5px';
+        this.statusIndicator.style.fontSize = '0.8rem';
+        this.statusIndicator.style.zIndex = '10000';
+        this.statusIndicator.style.transition = 'opacity 0.3s';
+        this.statusIndicator.innerHTML = '<i class="fas fa-shield-alt"></i> Protection: Active';
+        
+        // Add Font Awesome if not already loaded
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const faLink = document.createElement('link');
+            faLink.rel = 'stylesheet';
+            faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+            document.head.appendChild(faLink);
+        }
+        
+        document.body.appendChild(this.statusIndicator);
+    }
+    
+    _updateStatus(message) {
+        if (this.statusIndicator && this.config.showStatusIndicator) {
+            this.statusIndicator.innerHTML = `<i class="fas fa-shield-alt"></i> ${message}`;
+            this.statusIndicator.style.opacity = '1';
+            
+            // Reset after delay
+            setTimeout(() => {
+                if (this.statusIndicator) {
+                    this.statusIndicator.style.opacity = '0.7';
+                    this.statusIndicator.innerHTML = '<i class="fas fa-shield-alt"></i> Protection: Active';
+                }
+            }, 2000);
+        }
+    }
+}
+
+// Auto-initialize if configured to do so
+if (typeof PAGE_PROTECTOR_AUTO_INIT !== 'undefined' && PAGE_PROTECTOR_AUTO_INIT) {
+    document.addEventListener('DOMContentLoaded', function() {
+        new PageProtector().init();
+    });
 }

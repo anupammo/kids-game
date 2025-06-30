@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Protection Library Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ffcc00;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+            color: #ffcc00;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .info h2 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 204, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+        }
+        
+        .feature-details h3 {
+            margin-bottom: 8px;
+            color: #ffcc00;
+        }
+        
+        .feature-details p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .warning {
+            background: rgba(255, 50, 50, 0.2);
+            border-left: 4px solid #ff3232;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 25px;
+        }
+        
+        .warning h3 {
+            color: #ff3232;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            background: linear-gradient(to right, #ffcc00, #ff9900);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.6);
+        }
+        
+        .secondary {
+            background: linear-gradient(to right, #4a4a4a, #2a2a2a);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .shield-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: #ffcc00;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .status {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .feature {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+    
+    <!-- Inline version of the protection library -->
+    <script>
+        class PageProtector {
+            constructor(options = {}) {
+                // Default configuration
+                this.defaultConfig = {
+                    disableRightClick: true,
+                    disableShortcuts: true,
+                    disableTextSelection: true,
+                    tamperDetection: true,
+                    obfuscate: true,
+                    tamperCheckInterval: 1000,
+                    tamperThreshold: 100,
+                    onContextMenuBlocked: null,
+                    onShortcutBlocked: null,
+                    onDevToolsDetected: null
+                };
+                
+                // Merge options with defaults
+                this.config = {...this.defaultConfig, ...options};
+                
+                // Store references to event listeners
+                this.listeners = {
+                    contextmenu: null,
+                    keydown: null,
+                    keypress: null,
+                    selectstart: null
+                };
+                
+                // Store interval ID for tamper detection
+                this.tamperInterval = null;
+            }
+            
+            init() {
+                // Initialize all enabled protections
+                if (this.config.disableRightClick) this._disableRightClick();
+                if (this.config.disableShortcuts) this._disableShortcuts();
+                if (this.config.disableTextSelection) this._disableTextSelection();
+                if (this.config.tamperDetection) this._enableTamperDetection();
+                if (this.config.obfuscate) this._obfuscateSource();
+                
+                console.log("PageProtector initialized successfully!");
+            }
+            
+            destroy() {
+                // Remove all event listeners
+                if (this.listeners.contextmenu) {
+                    document.removeEventListener('contextmenu', this.listeners.contextmenu);
+                }
+                
+                if (this.listeners.keydown) {
+                    document.removeEventListener('keydown', this.listeners.keydown);
+                }
+                
+                if (this.listeners.keypress) {
+                    document.onkeypress = null;
+                }
+                
+                if (this.listeners.selectstart) {
+                    document.removeEventListener('selectstart', this.listeners.selectstart);
+                }
+                
+                // Clear tamper detection interval
+                if (this.tamperInterval) {
+                    clearInterval(this.tamperInterval);
+                    this.tamperInterval = null;
+                }
+                
+                console.log("PageProtector destroyed");
+            }
+            
+            _disableRightClick() {
+                this.listeners.contextmenu = (e) => {
+                    e.preventDefault();
+                    if (this.config.onContextMenuBlocked) {
+                        this.config.onContextMenuBlocked(e);
+                    }
+                };
+                document.addEventListener('contextmenu', this.listeners.contextmenu);
+            }
+            
+            _disableShortcuts() {
+                this.listeners.keydown = (e) => {
+                    // Disable F12
+                    if (e.key === 'F12') {
+                        e.preventDefault();
+                        if (this.config.onShortcutBlocked) {
+                            this.config.onShortcutBlocked('F12');
+                        }
+                        return;
+                    }
+                    
+                    // Disable Ctrl+Shift+I
+                    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                        e.preventDefault();
+                        if (this.config.onShortcutBlocked) {
+                            this.config.onShortcutBlocked('Ctrl+Shift+I');
+                        }
+                        return;
+                    }
+                    
+                    // Disable Ctrl+Shift+J
+                    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                        e.preventDefault();
+                        if (this.config.onShortcutBlocked) {
+                            this.config.onShortcutBlocked('Ctrl+Shift+J');
+                        }
+                        return;
+                    }
+                    
+                    // Disable Ctrl+U (View source)
+                    if (e.ctrlKey && e.key === 'u') {
+                        e.preventDefault();
+                        if (this.config.onShortcutBlocked) {
+                            this.config.onShortcutBlocked('Ctrl+U');
+                        }
+                        return;
+                    }
+                    
+                    // Disable Ctrl+Shift+C (Chrome/Firefox element inspector)
+                    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                        e.preventDefault();
+                        if (this.config.onShortcutBlocked) {
+                            this.config.onShortcutBlocked('Ctrl+Shift+C');
+                        }
+                        return;
+                    }
+                };
+                document.addEventListener('keydown', this.listeners.keydown);
+                
+                // Block menu bar access to View Source
+                this.listeners.keypress = (e) => {
+                    if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+                        e.preventDefault();
+                        if (this.config.onShortcutBlocked) {
+                            this.config.onShortcutBlocked('Ctrl+U');
+                        }
+                        return false;
+                    }
+                };
+                document.onkeypress = this.listeners.keypress;
+            }
+            
+            _disableTextSelection() {
+                this.listeners.selectstart = (e) => {
+                    e.preventDefault();
+                };
+                document.addEventListener('selectstart', this.listeners.selectstart);
+            }
+            
+            _enableTamperDetection() {
+                this.tamperInterval = setInterval(() => {
+                    const before = performance.now();
+                    
+                    // This will pause execution if dev tools are open
+                    try {
+                        // Using a function constructor to bypass breakpoint detection
+                        const debug = new Function("debugger;");
+                        debug();
+                    } catch (e) {
+                        // Continue even if debugger statement is blocked
+                    }
+                    
+                    const after = performance.now();
+                    
+                    if (after - before > this.config.tamperThreshold) {
+                        if (this.config.onDevToolsDetected) {
+                            this.config.onDevToolsDetected();
+                        }
+                        location.reload();
+                    }
+                }, this.config.tamperCheckInterval);
+            }
+            
+            _obfuscateSource() {
+                // Add a comment to the body for obfuscation
+                document.body.innerHTML += '<!-- Source code protected by PageProtector.js -->';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="shield-icon">🛡️</div>
+        
+        <div class="header">
+            <h1>Page Protection Library</h1>
+            <p class="subtitle">Now working with enhanced protection</p>
+        </div>
+        
+        <div class="info">
+            <h2>Library Features</h2>
+            
+            <div class="feature">
+                <div class="icon">🔒</div>
+                <div class="feature-details">
+                    <h3>Right-Click Disabled</h3>
+                    <p>Prevents access to the context menu that contains "Inspect Element" and "View Page Source" options.</p>
+                    <p>Try it: Right-click anywhere on this page.</p>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="icon">⌨️</div>
+                <div class="feature-details">
+                    <h3>Developer Tools Shortcuts Blocked</h3>
+                    <p>Disables keyboard shortcuts including F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U that open developer tools.</p>
+                    <p>Try it: Press F12 or Ctrl+Shift+I.</p>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="icon">👁️</div>
+                <div class="feature-details">
+                    <h3>View Source Protection</h3>
+                    <p>Blocks the ability to view the page source through browser menus or address bar tricks.</p>
+                    <p>Try it: Press Ctrl+U or try to view source from browser menu.</p>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="icon">🔄</div>
+                <div class="feature-details">
+                    <h3>Tamper Detection</h3>
+                    <p>Automatically reloads the page if developer tools are detected as open during runtime.</p>
+                    <p>Try it: Open developer tools while this page is running.</p>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <h3>Important Security Note</h3>
+                <p>While these measures make inspection more difficult, determined users can still bypass them. For true security, sensitive logic should be handled server-side. Client-side protections are deterrents, not foolproof solutions.</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="testProtection">Test Protection</button>
+            <button class="secondary" id="toggleProtection">Disable Protection</button>
+        </div>
+        
+        <div class="status" id="status">
+            Protection: <span id="protectionStatus" style="color: #4cff4c;">Active</span> | 
+            Last Event: <span id="lastEvent">None</span>
+        </div>
+        
+        <div class="footer">
+            <p>Try to inspect this page using any method - the protections should prevent it!</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the protection library with custom configuration
+        const protector = new PageProtector({
+            disableRightClick: true,
+            disableShortcuts: true,
+            disableTextSelection: true,
+            tamperDetection: true,
+            obfuscate: true,
+            tamperCheckInterval: 1000,
+            tamperThreshold: 100,
+            onContextMenuBlocked: function(e) {
+                document.getElementById('lastEvent').textContent = 'Context menu blocked';
+                document.getElementById('lastEvent').style.color = '#ff4c4c';
+                setTimeout(() => {
+                    document.getElementById('lastEvent').style.color = 'white';
+                }, 1000);
+            },
+            onShortcutBlocked: function(shortcut) {
+                document.getElementById('lastEvent').textContent = `${shortcut} blocked`;
+                document.getElementById('lastEvent').style.color = '#ff4c4c';
+                setTimeout(() => {
+                    document.getElementById('lastEvent').style.color = 'white';
+                }, 1000);
+            },
+            onDevToolsDetected: function() {
+                document.getElementById('lastEvent').textContent = 'Dev tools detected! Reloading...';
+                document.getElementById('lastEvent').style.color = '#ff4c4c';
+            }
+        });
+        
+        // Initialize the protection
+        protector.init();
+        
+        // Button event handlers
+        document.getElementById('testProtection').addEventListener('click', function() {
+            alert('Try to inspect this page! You\'ll find the protection in action.');
+            document.getElementById('lastEvent').textContent = 'Test button clicked';
+            document.getElementById('lastEvent').style.color = '#4cff4c';
+            setTimeout(() => {
+                document.getElementById('lastEvent').style.color = 'white';
+            }, 1000);
+        });
+        
+        let protectionEnabled = true;
+        document.getElementById('toggleProtection').addEventListener('click', function() {
+            if (protectionEnabled) {
+                protector.destroy();
+                document.getElementById('protectionStatus').textContent = 'Disabled';
+                document.getElementById('protectionStatus').style.color = '#ff4c4c';
+                document.getElementById('toggleProtection').textContent = 'Enable Protection';
+                document.getElementById('lastEvent').textContent = 'Protection disabled';
+                document.getElementById('lastEvent').style.color = '#ff4c4c';
+                protectionEnabled = false;
+            } else {
+                protector.init();
+                document.getElementById('protectionStatus').textContent = 'Active';
+                document.getElementById('protectionStatus').style.color = '#4cff4c';
+                document.getElementById('toggleProtection').textContent = 'Disable Protection';
+                document.getElementById('lastEvent').textContent = 'Protection enabled';
+                document.getElementById('lastEvent').style.color = '#4cff4c';
+                protectionEnabled = true;
+            }
+            
+            setTimeout(() => {
+                document.getElementById('lastEvent').style.color = 'white';
+            }, 1000);
+        });
+        
+        // Add some dummy elements to make the page more complex
+        const dummyContent = document.createElement('div');
+        dummyContent.style.marginTop = '20px';
+        dummyContent.style.padding = '15px';
+        dummyContent.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        dummyContent.style.borderRadius = '10px';
+        dummyContent.innerHTML = `
+            <h3>Protected Content</h3>
+            <p>This section contains elements that would normally be inspectable, but are protected.</p>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                <button style="padding: 8px 15px; background: #4361ee; border: none; border-radius: 5px;">Button 1</button>
+                <button style="padding: 8px 15px; background: #4cc9f0; border: none; border-radius: 5px;">Button 2</button>
+                <button style="padding: 8px 15px; background: #f72585; border: none; border-radius: 5px;">Button 3</button>
+            </div>
+        `;
+        document.querySelector('.container').appendChild(dummyContent);
+        
+        // Add more protection indicators
+        const protectionInfo = document.createElement('div');
+        protectionInfo.style.marginTop = '15px';
+        protectionInfo.style.fontSize = '0.9em';
+        protectionInfo.style.opacity = '0.8';
+        protectionInfo.innerHTML = `
+            <p>🔒 Page is secured against inspection attempts</p>
+            <p>🛡️ Tamper detection is active</p>
+        `;
+        document.getElementById('status').appendChild(protectionInfo);
+    </script>
+</body>
+</html>
