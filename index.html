@@ -1,894 +1,1155 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Math Tables Adventure - Learn Multiplication!</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --warning: #f9c74f;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --pre-primary: #FF9EAA;
-            --class1: #4cc9f0;
-            --class2: #9d4edd;
-            --class3: #f9c74f;
-            --class4: #90be6d;
+      :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --success: #4cc9f0;
+        --danger: #f72585;
+        --warning: #f9c74f;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --pre-primary: #ff9eaa;
+        --class1: #4cc9f0;
+        --class2: #9d4edd;
+        --class3: #f9c74f;
+        --class4: #90be6d;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: linear-gradient(135deg, #4cc9f0, #4361ee);
+        min-height: 100vh;
+        min-height: 100dvh;
+        font-family: "Comic Sans MS", "Marker Felt", "Chalkboard SE", cursive,
+          sans-serif;
+        overflow-x: hidden;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .game-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2rem;
+        max-height: 95vh;
+        overflow-y: auto;
+      }
+
+      .header {
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        color: white;
+        padding: 1.5rem;
+        border-radius: 15px 15px 0 0;
+        margin: -2rem -2rem 1.5rem -2rem;
+        text-align: center;
+        position: relative;
+      }
+
+      .header h1 {
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+      }
+
+      .character {
+        position: absolute;
+        bottom: -30px;
+        right: 20px;
+        width: 80px;
+        height: 80px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="%23F9C74F"/><circle cx="40" cy="35" r="3" fill="%23333"/><circle cx="60" cy="35" r="3" fill="%23333"/><path d="M45,50 Q50,55 55,50" stroke="%23333" stroke-width="2" fill="none"/></svg>')
+          no-repeat;
+        background-size: contain;
+        z-index: 10;
+      }
+
+      .level-card {
+        border-radius: 15px;
+        padding: 1.2rem;
+        text-align: center;
+        margin: 10px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        height: 100%;
+      }
+
+      .level-card:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .level-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+      }
+
+      .pre-primary {
+        background-color: var(--pre-primary);
+      }
+      .pre-primary::before {
+        background: linear-gradient(to right, #ff6b7c, #ff9eaa);
+      }
+
+      .class1 {
+        background-color: var(--class1);
+      }
+      .class1::before {
+        background: linear-gradient(to right, #00a8e8, #4cc9f0);
+      }
+
+      .class2 {
+        background-color: var(--class2);
+      }
+      .class2::before {
+        background: linear-gradient(to right, #7b2cbf, #9d4edd);
+      }
+
+      .class3 {
+        background-color: var(--class3);
+      }
+      .class3::before {
+        background: linear-gradient(to right, #f8961e, #f9c74f);
+      }
+
+      .class4 {
+        background-color: var(--class4);
+      }
+      .class4::before {
+        background: linear-gradient(to right, #43aa8b, #90be6d);
+      }
+
+      .table-btn {
+        background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        margin: 8px;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--dark);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .table-btn:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .table-btn.selected {
+        background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(67, 97, 238, 0.5);
+      }
+
+      .game-screen {
+        display: none;
+      }
+
+      .question-box {
+        background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+        border-radius: 15px;
+        padding: 1.5rem;
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 1rem 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        min-height: 130px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .timer-container {
+        position: absolute;
+        top: -12px;
+        right: -12px;
+        background: var(--danger);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border: 3px solid white;
+        z-index: 5;
+      }
+
+      .options-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 1.2rem 0;
+      }
+
+      .option-btn {
+        background: white;
+        border: 3px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 0.8rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .option-btn:hover {
+        transform: translateY(-3px);
+        border-color: var(--primary);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .option-btn.correct {
+        background: linear-gradient(to bottom, #56ab2f, #a8e063);
+        color: white;
+        border-color: #56ab2f;
+      }
+
+      .option-btn.wrong {
+        background: linear-gradient(to bottom, #ff512f, #dd2476);
+        color: white;
+        border-color: #ff512f;
+      }
+
+      .progress-container {
+        margin: 1.2rem 0;
+      }
+
+      .progress {
+        height: 22px;
+        border-radius: 12px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .progress-bar {
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+      }
+
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        font-size: 1.1rem;
+        margin: 0.8rem 0;
+        background: #f0f8ff;
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-weight: bold;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .stats > div {
+        min-width: 100px;
+        text-align: center;
+      }
+
+      .result-screen {
+        display: none;
+        text-align: center;
+        padding: 1.5rem;
+      }
+
+      .result-icon {
+        font-size: 5rem;
+        color: var(--primary);
+        margin: 0.8rem 0;
+        animation: bounce 1s infinite alternate;
+      }
+
+      @keyframes bounce {
+        from {
+          transform: translateY(0);
         }
-        
-        body {
-            background: linear-gradient(135deg, #4cc9f0, #4361ee);
-            min-height: 100vh;
-            font-family: 'Comic Sans MS', 'Marker Felt', 'Chalkboard SE', cursive, sans-serif;
-            overflow-x: hidden;
-            padding: 20px;
+        to {
+          transform: translateY(-15px);
         }
-        
+      }
+
+      .confetti {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: #f00;
+        animation: fall linear forwards;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .btn-custom {
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        border: none;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        font-size: 1.1rem;
+        border-radius: 50px;
+        font-weight: bold;
+        margin: 0.4rem;
+        transition: all 0.3s ease;
+        min-width: 180px;
+      }
+
+      .btn-custom:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-custom:active {
+        transform: translateY(1px);
+      }
+
+      .star {
+        color: gold;
+        font-size: 1.8rem;
+        margin: 0 3px;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+      }
+
+      .animate-bounce {
+        animation: bounce 0.5s ease infinite alternate;
+      }
+
+      .animate-pulse {
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .level-icon {
+        font-size: 2.2rem;
+        margin-bottom: 8px;
+      }
+
+      .level-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .level-info {
+        font-size: 0.9rem;
+        opacity: 0.9;
+      }
+
+      .timer-low {
+        animation: pulse 0.8s infinite;
+        background: #ff6b6b !important;
+      }
+
+      .screen {
+        display: none;
+      }
+
+      .active-screen {
+        display: block;
+      }
+
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .result-content {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-width: 400px;
+        margin: 1rem auto;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      @media (max-width: 768px) {
         .game-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
+          padding: 1.5rem;
+          max-height: 95vh;
         }
-        
+
         .header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem;
-            border-radius: 15px 15px 0 0;
-            margin: -2rem -2rem 2rem -2rem;
-            text-align: center;
-            position: relative;
+          padding: 1rem;
+          margin: -1.5rem -1.5rem 1.2rem -1.5rem;
         }
-        
+
         .header h1 {
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            margin: 0;
+          font-size: 1.5rem;
         }
-        
+
+        .header p {
+          font-size: 0.95rem;
+        }
+
         .character {
-            position: absolute;
-            bottom: -40px;
-            right: 30px;
-            width: 100px;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="%23F9C74F"/><circle cx="40" cy="35" r="3" fill="%23333"/><circle cx="60" cy="35" r="3" fill="%23333"/><path d="M45,50 Q50,55 55,50" stroke="%23333" stroke-width="2" fill="none"/></svg>') no-repeat;
-            background-size: contain;
-            z-index: 10;
+          width: 60px;
+          height: 60px;
+          bottom: -25px;
+          right: 15px;
         }
-        
-        .level-card {
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            margin: 15px 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            border: none;
-        }
-        
-        .level-card:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .level-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-        }
-        
-        .pre-primary { background-color: var(--pre-primary); }
-        .pre-primary::before { background: linear-gradient(to right, #ff6b7c, #ff9eaa); }
-        
-        .class1 { background-color: var(--class1); }
-        .class1::before { background: linear-gradient(to right, #00a8e8, #4cc9f0); }
-        
-        .class2 { background-color: var(--class2); }
-        .class2::before { background: linear-gradient(to right, #7b2cbf, #9d4edd); }
-        
-        .class3 { background-color: var(--class3); }
-        .class3::before { background: linear-gradient(to right, #f8961e, #f9c74f); }
-        
-        .class4 { background-color: var(--class4); }
-        .class4::before { background: linear-gradient(to right, #43aa8b, #90be6d); }
-        
+
         .table-btn {
-            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-            border: none;
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            margin: 10px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--dark);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+          width: 50px;
+          height: 50px;
+          font-size: 1.2rem;
+          margin: 5px;
         }
-        
-        .table-btn:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .table-btn.selected {
-            background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(67, 97, 238, 0.5);
-        }
-        
-        .game-screen {
-            display: none;
-        }
-        
+
         .question-box {
-            background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
-            border-radius: 15px;
-            padding: 2rem;
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 1rem 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+          font-size: 1.7rem;
+          min-height: 110px;
+          padding: 1.2rem;
         }
-        
-        .timer-container {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            background: var(--danger);
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border: 3px solid white;
-        }
-        
+
         .options-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 1.5rem 0;
+          grid-template-columns: 1fr;
         }
-        
-        .option-btn {
-            background: white;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1rem;
-            font-size: 1.8rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
+
+        .timer-container {
+          width: 50px;
+          height: 50px;
+          font-size: 1.3rem;
+          top: -10px;
+          right: -10px;
         }
-        
-        .option-btn:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .option-btn.correct {
-            background: linear-gradient(to bottom, #56ab2f, #a8e063);
-            color: white;
-            border-color: #56ab2f;
-        }
-        
-        .option-btn.wrong {
-            background: linear-gradient(to bottom, #ff512f, #dd2476);
-            color: white;
-            border-color: #ff512f;
-        }
-        
-        .progress-container {
-            margin: 1.5rem 0;
-        }
-        
-        .progress {
-            height: 25px;
-            border-radius: 12px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .progress-bar {
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-        }
-        
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            font-size: 1.2rem;
-            margin: 1rem 0;
-            background: #f0f8ff;
-            padding: 0.8rem;
-            border-radius: 10px;
-            font-weight: bold;
-        }
-        
-        .result-screen {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .result-icon {
-            font-size: 6rem;
-            color: var(--primary);
-            margin: 1rem 0;
-            animation: bounce 1s infinite alternate;
-        }
-        
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-20px); }
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            animation: fall linear forwards;
-        }
-        
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        
+
         .btn-custom {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            border: none;
-            color: white;
-            padding: 0.8rem 2rem;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            margin: 0.5rem;
-            transition: all 0.3s ease;
+          min-width: 160px;
+          padding: 0.6rem 1.2rem;
+          font-size: 1rem;
         }
-        
-        .btn-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+        .result-icon {
+          font-size: 4rem;
         }
-        
-        .btn-custom:active {
-            transform: translateY(1px);
+
+        .result-content {
+          padding: 1rem;
         }
-        
-        .star {
-            color: gold;
-            font-size: 2rem;
-            margin: 0 3px;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+      }
+
+      @media (max-width: 480px) {
+        .game-container {
+          padding: 1rem;
         }
-        
-        .animate-bounce {
-            animation: bounce 0.5s ease infinite alternate;
+
+        .header {
+          margin: -1rem -1rem 1rem -1rem;
         }
-        
-        .animate-pulse {
-            animation: pulse 1.5s infinite;
+
+        .level-card {
+          padding: 1rem;
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .question-box {
+          font-size: 1.5rem;
+          min-height: 100px;
         }
-        
-        .level-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+
+        .option-btn {
+          font-size: 1.3rem;
+          padding: 0.6rem;
         }
-        
-        .level-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+
+        .stats {
+          font-size: 1rem;
         }
-        
-        .level-info {
-            font-size: 0.9rem;
-            opacity: 0.9;
+
+        .btn-custom {
+          min-width: 140px;
         }
-        
-        .timer-low {
-            animation: pulse 0.8s infinite;
-            background: #ff6b6b !important;
-        }
-        
-        @media (max-width: 768px) {
-            .table-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1.3rem;
-            }
-            
-            .question-box {
-                font-size: 2rem;
-                min-height: 120px;
-            }
-            
-            .options-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .timer-container {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="container py-4">
-        <div class="game-container animate-pulse">
-            <div class="header position-relative">
-                <h1><i class="fas fa-calculator me-2"></i> Math Tables Adventure</h1>
-                <p class="mb-0">Learn multiplication tables with timed levels!</p>
-                <div class="character"></div>
-            </div>
-            
-            <!-- Grade Selection Screen -->
-            <div id="gradeScreen" class="text-center">
-                <div class="mb-4">
-                    <h2 class="text-primary">Choose Your Grade Level</h2>
-                    <p class="lead">Each level has different time limits to challenge your math skills!</p>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <div class="level-card pre-primary" data-level="0">
-                            <div class="level-icon"><i class="fas fa-baby"></i></div>
-                            <div class="level-title">Pre-Primary</div>
-                            <div class="level-info">30 seconds per question</div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12 mb-3">
-                        <div class="level-card class1" data-level="1">
-                            <div class="level-icon"><i class="fas fa-apple-alt"></i></div>
-                            <div class="level-title">Class 1</div>
-                            <div class="level-info">25 seconds per question</div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12 mb-3">
-                        <div class="level-card class2" data-level="2">
-                            <div class="level-icon"><i class="fas fa-book"></i></div>
-                            <div class="level-title">Class 2</div>
-                            <div class="level-info">20 seconds per question</div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12 mb-3">
-                        <div class="level-card class3" data-level="3">
-                            <div class="level-icon"><i class="fas fa-pencil-alt"></i></div>
-                            <div class="level-title">Class 3</div>
-                            <div class="level-info">15 seconds per question</div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12 mb-3">
-                        <div class="level-card class4" data-level="4">
-                            <div class="level-icon"><i class="fas fa-graduation-cap"></i></div>
-                            <div class="level-title">Class 4</div>
-                            <div class="level-info">10 seconds per question</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Table Selection Screen -->
-            <div id="welcomeScreen" class="text-center" style="display: none;">
-                <div class="mb-4">
-                    <h2 class="text-primary">Select Multiplication Table</h2>
-                    <p class="lead">You've selected: <span id="selectedGrade" class="fw-bold text-primary">Pre-Primary</span> (<span id="timeInfo">30s</span> per question)</p>
-                </div>
-                
-                <div class="d-flex flex-wrap justify-content-center mb-4">
-                    <button class="table-btn" data-table="random">🎲</button>
-                    <button class="table-btn" data-table="1">1</button>
-                    <button class="table-btn" data-table="2">2</button>
-                    <button class="table-btn" data-table="3">3</button>
-                    <button class="table-btn" data-table="4">4</button>
-                    <button class="table-btn" data-table="5">5</button>
-                    <button class="table-btn" data-table="6">6</button>
-                    <button class="table-btn" data-table="7">7</button>
-                    <button class="table-btn" data-table="8">8</button>
-                    <button class="table-btn" data-table="9">9</button>
-                    <button class="table-btn" data-table="10">10</button>
-                    <button class="table-btn" data-table="11">11</button>
-                    <button class="table-btn" data-table="12">12</button>
-                    <button class="table-btn" data-table="13">13</button>
-                    <button class="table-btn" data-table="14">14</button>
-                    <button class="table-btn" data-table="15">15</button>
-                    <button class="table-btn" data-table="16">16</button>
-                    <button class="table-btn" data-table="17">17</button>
-                    <button class="table-btn" data-table="18">18</button>
-                    <button class="table-btn" data-table="19">19</button>
-                    <button class="table-btn" data-table="20">20</button>
-                </div>
-                
-                <div class="alert alert-info">
-                    <i class="fas fa-lightbulb me-2"></i> <strong>Tip:</strong> Start with tables you find challenging!
-                </div>
-                
-                <div class="text-center mt-3">
-                    <button id="changeLevelBtn" class="btn-custom" style="background: linear-gradient(to right, #6a11cb, #2575fc);">
-                        <i class="fas fa-exchange-alt me-2"></i> Change Grade Level
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Game Screen -->
-            <div id="gameScreen" class="game-screen">
-                <h2 class="text-center mb-4">Practice Table of <span id="currentTable" class="text-primary">5</span></h2>
-                <p class="text-center mb-3">Grade Level: <span id="currentLevel" class="fw-bold">Pre-Primary</span> (<span id="currentTimeInfo">30s</span> per question)</p>
-                
-                <div class="question-box">
-                    <div class="timer-container" id="timer">
-                        30
-                    </div>
-                    <span id="question">5 × 3 = ?</span>
-                </div>
-                
-                <div class="options-container" id="optionsContainer">
-                    <!-- Options will be generated here -->
-                </div>
-                
-                <div class="progress-container">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Progress</span>
-                        <span><span id="currentQuestion">1</span>/10</span>
-                    </div>
-                    <div class="progress">
-                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 10%"></div>
-                    </div>
-                </div>
-                
-                <div class="stats">
-                    <div>
-                        <i class="fas fa-check-circle text-success me-2"></i>
-                        Correct: <span id="correctCount">0</span>
-                    </div>
-                    <div>
-                        <i class="fas fa-trophy text-warning me-2"></i>
-                        Score: <span id="score">0</span>
-                    </div>
-                    <div>
-                        <i class="fas fa-clock text-info me-2"></i>
-                        Time: <span id="timeLeft">0s</span>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-4">
-                    <button id="nextBtn" class="btn-custom" disabled>Next Question <i class="fas fa-arrow-right ms-2"></i></button>
-                </div>
-            </div>
-            
-            <!-- Result Screen -->
-            <div id="resultScreen" class="result-screen">
-                <div class="result-icon">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <h2 class="text-primary">Congratulations!</h2>
-                <h3>You completed the <span id="completedTable" class="text-primary">5</span> times table!</h3>
-                <p class="mb-3">Grade Level: <span id="completedLevel" class="fw-bold">Pre-Primary</span></p>
-                
-                <div class="my-4 p-3 bg-light rounded" style="max-width: 400px; margin: 0 auto;">
-                    <h4>Your Score</h4>
-                    <div class="display-3 text-primary fw-bold"><span id="finalScore">0</span>/100</div>
-                    <div class="stars my-3">
-                        <i class="star fas fa-star"></i>
-                        <i class="star fas fa-star"></i>
-                        <i class="star fas fa-star"></i>
-                        <i class="star fas fa-star"></i>
-                        <i class="star fas fa-star"></i>
-                    </div>
-                    <div>Correct Answers: <span id="finalCorrect">0</span>/10</div>
-                    <div class="mt-2">Average Time: <span id="avgTime">0</span> seconds</div>
-                </div>
-                
-                <div class="d-flex flex-wrap justify-content-center mt-4">
-                    <button id="restartBtn" class="btn-custom"><i class="fas fa-redo me-2"></i> Play Again</button>
-                    <button id="newTableBtn" class="btn-custom" style="background: linear-gradient(to right, #ff9a9e, #fad0c4);"><i class="fas fa-random me-2"></i> New Table</button>
-                    <button id="changeLevelAfterBtn" class="btn-custom" style="background: linear-gradient(to right, #6a11cb, #2575fc);">
-                        <i class="fas fa-exchange-alt me-2"></i> Change Grade
-                    </button>
-                </div>
-            </div>
+  </head>
+  <body>
+    <div class="container py-2">
+      <div class="game-container">
+        <div class="header position-relative">
+          <h1><i class="fas fa-calculator me-2"></i> Math Tables Adventure</h1>
+          <p class="mb-0">Learn multiplication tables with timed levels!</p>
+          <div class="character"></div>
         </div>
-        
-        <footer class="text-center text-white mt-4">
-            <p>Made with <i class="fas fa-heart text-danger"></i> for kids to learn math!</p>
-        </footer>
+
+        <!-- Grade Selection Screen -->
+        <div id="gradeScreen" class="screen active-screen">
+          <div class="mb-3">
+            <h2 class="text-primary text-center">Choose Your Grade Level</h2>
+            <p class="lead text-center">
+              Each level has different time limits to challenge your math
+              skills!
+            </p>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 col-12 mb-3">
+              <div class="level-card pre-primary" data-level="0">
+                <div class="level-icon"><i class="fas fa-baby"></i></div>
+                <div class="level-title">Pre-Primary</div>
+                <div class="level-info">30 seconds per question</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-12 mb-3">
+              <div class="level-card class1" data-level="1">
+                <div class="level-icon"><i class="fas fa-apple-alt"></i></div>
+                <div class="level-title">Class 1</div>
+                <div class="level-info">25 seconds per question</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-12 mb-3">
+              <div class="level-card class2" data-level="2">
+                <div class="level-icon"><i class="fas fa-book"></i></div>
+                <div class="level-title">Class 2</div>
+                <div class="level-info">20 seconds per question</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-12 mb-3">
+              <div class="level-card class3" data-level="3">
+                <div class="level-icon"><i class="fas fa-pencil-alt"></i></div>
+                <div class="level-title">Class 3</div>
+                <div class="level-info">15 seconds per question</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-12 mb-3">
+              <div class="level-card class4" data-level="4">
+                <div class="level-icon">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="level-title">Class 4</div>
+                <div class="level-info">10 seconds per question</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Selection Screen -->
+        <div id="welcomeScreen" class="screen">
+          <div class="mb-3">
+            <h2 class="text-primary text-center">
+              Select Multiplication Table
+            </h2>
+            <p class="lead text-center">
+              You've selected:
+              <span id="selectedGrade" class="fw-bold text-primary"
+                >Pre-Primary</span
+              >
+              (<span id="timeInfo">30s</span> per question)
+            </p>
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-center mb-3">
+            <button class="table-btn" data-table="random">🎲</button>
+            <button class="table-btn" data-table="1">1</button>
+            <button class="table-btn" data-table="2">2</button>
+            <button class="table-btn" data-table="3">3</button>
+            <button class="table-btn" data-table="4">4</button>
+            <button class="table-btn" data-table="5">5</button>
+            <button class="table-btn" data-table="6">6</button>
+            <button class="table-btn" data-table="7">7</button>
+            <button class="table-btn" data-table="8">8</button>
+            <button class="table-btn" data-table="9">9</button>
+            <button class="table-btn" data-table="10">10</button>
+            <button class="table-btn" data-table="11">11</button>
+            <button class="table-btn" data-table="12">12</button>
+            <button class="table-btn" data-table="13">13</button>
+            <button class="table-btn" data-table="14">14</button>
+            <button class="table-btn" data-table="15">15</button>
+            <button class="table-btn" data-table="16">16</button>
+            <button class="table-btn" data-table="17">17</button>
+            <button class="table-btn" data-table="18">18</button>
+            <button class="table-btn" data-table="19">19</button>
+            <button class="table-btn" data-table="20">20</button>
+          </div>
+
+          <div class="alert alert-info text-center">
+            <i class="fas fa-lightbulb me-2"></i> <strong>Tip:</strong> Start
+            with tables you find challenging!
+          </div>
+
+          <div class="text-center mt-2">
+            <button
+              id="changeLevelBtn"
+              class="btn-custom"
+              style="background: linear-gradient(to right, #6a11cb, #2575fc)"
+            >
+              <i class="fas fa-exchange-alt me-2"></i> Change Grade Level
+            </button>
+          </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+          <h2 class="text-center mb-0">
+            Practice Table of
+            <span id="currentTable" class="text-primary">5</span>
+          </h2>
+          <p class="text-center mb-3">
+            Grade Level:
+            <span id="currentLevel" class="fw-bold">Pre-Primary</span> (<span
+              id="currentTimeInfo"
+              >30s</span
+            >
+            per question)
+          </p>
+
+          <div class="question-box">
+            <div class="timer-container" id="timer">30</div>
+            <span id="question">5 × 3 = ?</span>
+          </div>
+
+          <div class="options-container" id="optionsContainer">
+            <!-- Options will be generated here -->
+          </div>
+
+          <div class="text-center mt-3">
+            <button id="nextBtn" class="btn-custom" disabled>
+              Next Question <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+          </div>
+
+          <div class="progress-container">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Progress</span>
+              <span><span id="currentQuestion">1</span>/10</span>
+            </div>
+            <div class="progress">
+              <div
+                id="progressBar"
+                class="progress-bar"
+                role="progressbar"
+                style="width: 10%"
+              ></div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div>
+              <i class="fas fa-check-circle text-success me-2"></i>
+              Correct: <span id="correctCount">0</span>
+            </div>
+            <div>
+              <i class="fas fa-trophy text-warning me-2"></i>
+              Score: <span id="score">0</span>
+            </div>
+            <div>
+              <i class="fas fa-clock text-info me-2"></i>
+              Time: <span id="timeLeft">0s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="screen">
+          <div class="result-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <h2 class="text-primary">Congratulations!</h2>
+          <h3>
+            You completed the
+            <span id="completedTable" class="text-primary">5</span> times table!
+          </h3>
+          <p class="mb-3">
+            Grade Level:
+            <span id="completedLevel" class="fw-bold">Pre-Primary</span>
+          </p>
+
+          <div class="result-content">
+            <h4>Your Score</h4>
+            <div class="display-4 text-primary fw-bold my-3">
+              <span id="finalScore">0</span>/100
+            </div>
+            <div class="stars my-3">
+              <i class="star fas fa-star"></i>
+              <i class="star fas fa-star"></i>
+              <i class="star fas fa-star"></i>
+              <i class="star fas fa-star"></i>
+              <i class="star fas fa-star"></i>
+            </div>
+            <div>Correct Answers: <span id="finalCorrect">0</span>/10</div>
+            <div class="mt-2">
+              Average Time: <span id="avgTime">0</span> seconds
+            </div>
+          </div>
+
+          <div class="btn-group mt-3">
+            <button id="restartBtn" class="btn-custom">
+              <i class="fas fa-redo me-2"></i> Play Again
+            </button>
+            <button
+              id="newTableBtn"
+              class="btn-custom"
+              style="background: linear-gradient(to right, #ff9a9e, #fad0c4)"
+            >
+              <i class="fas fa-random me-2"></i> New Table
+            </button>
+            <button
+              id="changeLevelAfterBtn"
+              class="btn-custom"
+              style="background: linear-gradient(to right, #6a11cb, #2575fc)"
+            >
+              <i class="fas fa-exchange-alt me-2"></i> Change Grade
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="text-center text-white mt-3 py-2">
+        <p>
+          Made with <i class="fas fa-heart text-danger"></i> for kids to learn
+          math!
+        </p>
+      </footer>
     </div>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Game state
-            const state = {
-                currentTable: null,
-                currentQuestion: 1,
-                totalQuestions: 10,
-                score: 0,
-                correctAnswers: 0,
-                currentOptions: [],
-                correctAnswer: null,
-                timePerQuestion: 30,
-                currentTime: 0,
-                timer: null,
-                gradeLevel: 0,
-                gradeName: "Pre-Primary",
-                timeUsed: [],
-                avgTime: 0
-            };
-            
-            // Level time settings
-            const levelTimes = [30, 25, 20, 15, 10];
-            const levelNames = ["Pre-Primary", "Class 1", "Class 2", "Class 3", "Class 4"];
-            
-            // DOM elements
-            const gradeScreen = document.getElementById('gradeScreen');
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const gameScreen = document.getElementById('gameScreen');
-            const resultScreen = document.getElementById('resultScreen');
-            const levelCards = document.querySelectorAll('.level-card');
-            const tableButtons = document.querySelectorAll('.table-btn');
-            const selectedGradeSpan = document.getElementById('selectedGrade');
-            const timeInfoSpan = document.getElementById('timeInfo');
-            const currentTableSpan = document.getElementById('currentTable');
-            const currentLevelSpan = document.getElementById('currentLevel');
-            const currentTimeInfoSpan = document.getElementById('currentTimeInfo');
-            const questionSpan = document.getElementById('question');
-            const optionsContainer = document.getElementById('optionsContainer');
-            const currentQuestionSpan = document.getElementById('currentQuestion');
-            const progressBar = document.getElementById('progressBar');
-            const correctCountSpan = document.getElementById('correctCount');
-            const scoreSpan = document.getElementById('score');
-            const timeLeftSpan = document.getElementById('timeLeft');
-            const finalScoreSpan = document.getElementById('finalScore');
-            const finalCorrectSpan = document.getElementById('finalCorrect');
-            const completedTableSpan = document.getElementById('completedTable');
-            const completedLevelSpan = document.getElementById('completedLevel');
-            const avgTimeSpan = document.getElementById('avgTime');
-            const nextBtn = document.getElementById('nextBtn');
-            const restartBtn = document.getElementById('restartBtn');
-            const newTableBtn = document.getElementById('newTableBtn');
-            const changeLevelBtn = document.getElementById('changeLevelBtn');
-            const changeLevelAfterBtn = document.getElementById('changeLevelAfterBtn');
-            const timerElement = document.getElementById('timer');
-            
-            // Event listeners
-            levelCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const level = parseInt(card.getAttribute('data-level'));
-                    selectGradeLevel(level);
-                });
-            });
-            
-            tableButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const table = button.getAttribute('data-table');
-                    startGame(table);
-                    button.classList.add('selected');
-                    
-                    // Remove selection from other buttons
-                    tableButtons.forEach(btn => {
-                        if (btn !== button) btn.classList.remove('selected');
-                    });
-                });
-            });
-            
-            nextBtn.addEventListener('click', nextQuestion);
-            restartBtn.addEventListener('click', () => startGame(state.currentTable));
-            newTableBtn.addEventListener('click', () => {
-                resultScreen.style.display = 'none';
-                welcomeScreen.style.display = 'block';
-            });
-            
-            changeLevelBtn.addEventListener('click', () => {
-                welcomeScreen.style.display = 'none';
-                gradeScreen.style.display = 'block';
-            });
-            
-            changeLevelAfterBtn.addEventListener('click', () => {
-                resultScreen.style.display = 'none';
-                gradeScreen.style.display = 'block';
-            });
-            
-            // Select grade level
-            function selectGradeLevel(level) {
-                state.gradeLevel = level;
-                state.gradeName = levelNames[level];
-                state.timePerQuestion = levelTimes[level];
-                
-                // Update UI
-                selectedGradeSpan.textContent = state.gradeName;
-                timeInfoSpan.textContent = state.timePerQuestion + 's';
-                
-                // Show table selection screen
-                gradeScreen.style.display = 'none';
-                welcomeScreen.style.display = 'block';
-            }
-            
-            // Start the game
-            function startGame(table) {
-                // Set the current table
-                state.currentTable = table;
-                state.currentQuestion = 1;
-                state.score = 0;
-                state.correctAnswers = 0;
-                state.timeUsed = [];
-                
-                // Update UI
-                welcomeScreen.style.display = 'none';
-                gameScreen.style.display = 'block';
-                resultScreen.style.display = 'none';
-                
-                currentTableSpan.textContent = table === 'random' ? 'Random' : table;
-                currentLevelSpan.textContent = state.gradeName;
-                currentTimeInfoSpan.textContent = state.timePerQuestion + 's';
-                updateScore();
-                generateQuestion();
-            }
-            
-            // Generate a new question
-            function generateQuestion() {
-                // Reset timer
-                state.currentTime = state.timePerQuestion;
-                timerElement.textContent = state.currentTime;
-                timerElement.classList.remove('timer-low');
-                
-                // Start timer
-                startTimer();
-                
-                let multiplier, multiplicand;
-                
-                if (state.currentTable === 'random') {
-                    multiplicand = Math.floor(Math.random() * 20) + 1;
-                    multiplier = Math.floor(Math.random() * 10) + 1;
-                } else {
-                    multiplicand = parseInt(state.currentTable);
-                    multiplier = Math.floor(Math.random() * 10) + 1;
-                }
-                
-                const answer = multiplicand * multiplier;
-                state.correctAnswer = answer;
-                
-                // Generate question text
-                questionSpan.textContent = `${multiplicand} × ${multiplier} = ?`;
-                currentQuestionSpan.textContent = state.currentQuestion;
-                progressBar.style.width = `${(state.currentQuestion / state.totalQuestions) * 100}%`;
-                
-                // Generate options (1 correct and 3 incorrect)
-                const options = [answer];
-                while (options.length < 4) {
-                    // Generate a wrong answer that's different from existing options
-                    let wrongAnswer;
-                    const offset = Math.floor(Math.random() * 10) + 1;
-                    const direction = Math.random() > 0.5 ? 1 : -1;
-                    wrongAnswer = answer + (offset * direction);
-                    
-                    // Ensure wrong answer is positive and not the same as correct answer
-                    if (wrongAnswer > 0 && !options.includes(wrongAnswer)) {
-                        options.push(wrongAnswer);
-                    }
-                }
-                
-                // Shuffle options
-                shuffleArray(options);
-                state.currentOptions = options;
-                
-                // Render options
-                renderOptions();
-            }
-            
-            // Start the timer
-            function startTimer() {
-                if (state.timer) clearInterval(state.timer);
-                
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    timerElement.textContent = state.currentTime;
-                    timeLeftSpan.textContent = state.currentTime + 's';
-                    
-                    // Low time warning
-                    if (state.currentTime <= 5) {
-                        timerElement.classList.add('timer-low');
-                    }
-                    
-                    // Time's up
-                    if (state.currentTime <= 0) {
-                        clearInterval(state.timer);
-                        timeUp();
-                    }
-                }, 1000);
-            }
-            
-            // Time's up handler
-            function timeUp() {
-                // Disable all buttons to prevent multiple answers
-                document.querySelectorAll('.option-btn').forEach(btn => {
-                    btn.disabled = true;
-                    
-                    // Highlight correct answer
-                    if (parseInt(btn.dataset.value) === state.correctAnswer) {
-                        btn.classList.add('correct');
-                    }
-                });
-                
-                // Record time used
-                state.timeUsed.push(state.timePerQuestion);
-                
-                nextBtn.disabled = false;
-                
-                // Show timeout message
-                questionSpan.innerHTML = `${questionSpan.textContent}<br><span class="text-danger" style="font-size: 1.2rem;">Time's up!</span>`;
-            }
-            
-            // Shuffle array (Fisher-Yates algorithm)
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            }
-            
-            // Render options to the DOM
-            function renderOptions() {
-                optionsContainer.innerHTML = '';
-                nextBtn.disabled = true;
-                
-                state.currentOptions.forEach((option, index) => {
-                    const button = document.createElement('button');
-                    button.className = 'option-btn';
-                    button.textContent = option;
-                    button.dataset.value = option;
-                    
-                    button.addEventListener('click', () => checkAnswer(option, button));
-                    
-                    optionsContainer.appendChild(button);
-                });
-            }
-            
-            // Check the selected answer
-            function checkAnswer(selectedValue, button) {
-                // Stop timer
-                clearInterval(state.timer);
-                
-                // Record time used
-                state.timeUsed.push(state.timePerQuestion - state.currentTime);
-                
-                // Disable all buttons to prevent multiple answers
-                document.querySelectorAll('.option-btn').forEach(btn => {
-                    btn.disabled = true;
-                });
-                
-                if (parseInt(selectedValue) === state.correctAnswer) {
-                    // Correct answer
-                    button.classList.add('correct');
-                    state.score += 10;
-                    state.correctAnswers++;
-                    
-                    // Create confetti effect
-                    createConfetti();
-                } else {
-                    // Wrong answer
-                    button.classList.add('wrong');
-                    
-                    // Highlight correct answer
-                    document.querySelectorAll('.option-btn').forEach(btn => {
-                        if (parseInt(btn.dataset.value) === state.correctAnswer) {
-                            btn.classList.add('correct');
-                        }
-                    });
-                }
-                
-                updateScore();
-                nextBtn.disabled = false;
-            }
-            
-            // Create confetti effect
-            function createConfetti() {
-                const colors = ['#f72585', '#4361ee', '#4cc9f0', '#f9c74f', '#56ab2f'];
-                const container = document.querySelector('.game-container');
-                
-                for (let i = 0; i < 50; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = `${Math.random() * 100}%`;
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.width = `${Math.random() * 10 + 5}px`;
-                    confetti.style.height = `${Math.random() * 10 + 5}px`;
-                    confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                    
-                    container.appendChild(confetti);
-                    
-                    // Remove confetti after animation completes
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 5000);
-                }
-            }
-            
-            // Update score display
-            function updateScore() {
-                correctCountSpan.textContent = state.correctAnswers;
-                scoreSpan.textContent = state.score;
-            }
-            
-            // Move to the next question
-            function nextQuestion() {
-                state.currentQuestion++;
-                
-                if (state.currentQuestion > state.totalQuestions) {
-                    endGame();
-                } else {
-                    generateQuestion();
-                }
-            }
-            
-            // End the game and show results
-            function endGame() {
-                // Calculate average time
-                const totalTime = state.timeUsed.reduce((a, b) => a + b, 0);
-                state.avgTime = (totalTime / state.timeUsed.length).toFixed(1);
-                
-                gameScreen.style.display = 'none';
-                resultScreen.style.display = 'block';
-                
-                completedTableSpan.textContent = state.currentTable === 'random' ? 'Random' : state.currentTable;
-                completedLevelSpan.textContent = state.gradeName;
-                finalScoreSpan.textContent = state.score;
-                finalCorrectSpan.textContent = state.correctAnswers;
-                avgTimeSpan.textContent = state.avgTime;
-                
-                // Calculate stars (1 star per 2 correct answers)
-                const stars = document.querySelectorAll('.star');
-                const starCount = Math.min(5, Math.ceil(state.correctAnswers / 2));
-                
-                stars.forEach((star, index) => {
-                    if (index < starCount) {
-                        star.classList.add('animate-bounce');
-                        star.style.animationDelay = `${index * 0.2}s`;
-                    } else {
-                        star.style.opacity = '0.3';
-                    }
-                });
-            }
+      document.addEventListener("DOMContentLoaded", function () {
+        // Game state
+        const state = {
+          currentTable: null,
+          currentQuestion: 1,
+          totalQuestions: 10,
+          score: 0,
+          correctAnswers: 0,
+          currentOptions: [],
+          correctAnswer: null,
+          timePerQuestion: 30,
+          currentTime: 0,
+          timer: null,
+          gradeLevel: 0,
+          gradeName: "Pre-Primary",
+          timeUsed: [],
+          avgTime: 0,
+        };
+
+        // Level time settings
+        const levelTimes = [30, 25, 20, 15, 10];
+        const levelNames = [
+          "Pre-Primary",
+          "Class 1",
+          "Class 2",
+          "Class 3",
+          "Class 4",
+        ];
+
+        // DOM elements
+        const gradeScreen = document.getElementById("gradeScreen");
+        const welcomeScreen = document.getElementById("welcomeScreen");
+        const gameScreen = document.getElementById("gameScreen");
+        const resultScreen = document.getElementById("resultScreen");
+        const levelCards = document.querySelectorAll(".level-card");
+        const tableButtons = document.querySelectorAll(".table-btn");
+        const selectedGradeSpan = document.getElementById("selectedGrade");
+        const timeInfoSpan = document.getElementById("timeInfo");
+        const currentTableSpan = document.getElementById("currentTable");
+        const currentLevelSpan = document.getElementById("currentLevel");
+        const currentTimeInfoSpan = document.getElementById("currentTimeInfo");
+        const questionSpan = document.getElementById("question");
+        const optionsContainer = document.getElementById("optionsContainer");
+        const currentQuestionSpan = document.getElementById("currentQuestion");
+        const progressBar = document.getElementById("progressBar");
+        const correctCountSpan = document.getElementById("correctCount");
+        const scoreSpan = document.getElementById("score");
+        const timeLeftSpan = document.getElementById("timeLeft");
+        const finalScoreSpan = document.getElementById("finalScore");
+        const finalCorrectSpan = document.getElementById("finalCorrect");
+        const completedTableSpan = document.getElementById("completedTable");
+        const completedLevelSpan = document.getElementById("completedLevel");
+        const avgTimeSpan = document.getElementById("avgTime");
+        const nextBtn = document.getElementById("nextBtn");
+        const restartBtn = document.getElementById("restartBtn");
+        const newTableBtn = document.getElementById("newTableBtn");
+        const changeLevelBtn = document.getElementById("changeLevelBtn");
+        const changeLevelAfterBtn = document.getElementById(
+          "changeLevelAfterBtn"
+        );
+        const timerElement = document.getElementById("timer");
+
+        // Event listeners
+        levelCards.forEach((card) => {
+          card.addEventListener("click", () => {
+            const level = parseInt(card.getAttribute("data-level"));
+            selectGradeLevel(level);
+          });
         });
+
+        tableButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const table = button.getAttribute("data-table");
+            startGame(table);
+            button.classList.add("selected");
+
+            // Remove selection from other buttons
+            tableButtons.forEach((btn) => {
+              if (btn !== button) btn.classList.remove("selected");
+            });
+          });
+        });
+
+        nextBtn.addEventListener("click", nextQuestion);
+        restartBtn.addEventListener("click", () =>
+          startGame(state.currentTable)
+        );
+        newTableBtn.addEventListener("click", () => {
+          showScreen(welcomeScreen);
+        });
+
+        changeLevelBtn.addEventListener("click", () => {
+          showScreen(gradeScreen);
+        });
+
+        changeLevelAfterBtn.addEventListener("click", () => {
+          showScreen(gradeScreen);
+        });
+
+        // Helper function to show a screen
+        function showScreen(screenElement) {
+          document.querySelectorAll(".screen").forEach((screen) => {
+            screen.classList.remove("active-screen");
+          });
+          screenElement.classList.add("active-screen");
+        }
+
+        // Select grade level
+        function selectGradeLevel(level) {
+          state.gradeLevel = level;
+          state.gradeName = levelNames[level];
+          state.timePerQuestion = levelTimes[level];
+
+          // Update UI
+          selectedGradeSpan.textContent = state.gradeName;
+          timeInfoSpan.textContent = state.timePerQuestion + "s";
+
+          // Show table selection screen
+          showScreen(welcomeScreen);
+        }
+
+        // Start the game
+        function startGame(table) {
+          // Set the current table
+          state.currentTable = table;
+          state.currentQuestion = 1;
+          state.score = 0;
+          state.correctAnswers = 0;
+          state.timeUsed = [];
+
+          // Update UI
+          showScreen(gameScreen);
+
+          currentTableSpan.textContent = table === "random" ? "Random" : table;
+          currentLevelSpan.textContent = state.gradeName;
+          currentTimeInfoSpan.textContent = state.timePerQuestion + "s";
+          updateScore();
+          generateQuestion();
+        }
+
+        // Generate a new question
+        function generateQuestion() {
+          // Reset timer
+          state.currentTime = state.timePerQuestion;
+          timerElement.textContent = state.currentTime;
+          timerElement.classList.remove("timer-low");
+
+          // Start timer
+          startTimer();
+
+          let multiplier, multiplicand;
+
+          if (state.currentTable === "random") {
+            multiplicand = Math.floor(Math.random() * 20) + 1;
+            multiplier = Math.floor(Math.random() * 10) + 1;
+          } else {
+            multiplicand = parseInt(state.currentTable);
+            multiplier = Math.floor(Math.random() * 10) + 1;
+          }
+
+          const answer = multiplicand * multiplier;
+          state.correctAnswer = answer;
+
+          // Generate question text
+          questionSpan.textContent = `${multiplicand} × ${multiplier} = ?`;
+          currentQuestionSpan.textContent = state.currentQuestion;
+          progressBar.style.width = `${
+            (state.currentQuestion / state.totalQuestions) * 100
+          }%`;
+
+          // Generate options (1 correct and 3 incorrect)
+          const options = [answer];
+          while (options.length < 4) {
+            // Generate a wrong answer that's different from existing options
+            let wrongAnswer;
+            const offset = Math.floor(Math.random() * 10) + 1;
+            const direction = Math.random() > 0.5 ? 1 : -1;
+            wrongAnswer = answer + offset * direction;
+
+            // Ensure wrong answer is positive and not the same as correct answer
+            if (wrongAnswer > 0 && !options.includes(wrongAnswer)) {
+              options.push(wrongAnswer);
+            }
+          }
+
+          // Shuffle options
+          shuffleArray(options);
+          state.currentOptions = options;
+
+          // Render options
+          renderOptions();
+        }
+
+        // Start the timer
+        function startTimer() {
+          if (state.timer) clearInterval(state.timer);
+
+          state.timer = setInterval(() => {
+            state.currentTime--;
+            timerElement.textContent = state.currentTime;
+            timeLeftSpan.textContent = state.currentTime + "s";
+
+            // Low time warning
+            if (state.currentTime <= 5) {
+              timerElement.classList.add("timer-low");
+            }
+
+            // Time's up
+            if (state.currentTime <= 0) {
+              clearInterval(state.timer);
+              timeUp();
+            }
+          }, 1000);
+        }
+
+        // Time's up handler
+        function timeUp() {
+          // Disable all buttons to prevent multiple answers
+          document.querySelectorAll(".option-btn").forEach((btn) => {
+            btn.disabled = true;
+
+            // Highlight correct answer
+            if (parseInt(btn.dataset.value) === state.correctAnswer) {
+              btn.classList.add("correct");
+            }
+          });
+
+          // Record time used
+          state.timeUsed.push(state.timePerQuestion);
+
+          nextBtn.disabled = false;
+
+          // Show timeout message
+          questionSpan.innerHTML = `${questionSpan.textContent}<br><span class="text-danger" style="font-size: 1.2rem;">Time's up!</span>`;
+        }
+
+        // Shuffle array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+        }
+
+        // Render options to the DOM
+        function renderOptions() {
+          optionsContainer.innerHTML = "";
+          nextBtn.disabled = true;
+
+          state.currentOptions.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.className = "option-btn";
+            button.textContent = option;
+            button.dataset.value = option;
+
+            button.addEventListener("click", () => checkAnswer(option, button));
+
+            optionsContainer.appendChild(button);
+          });
+        }
+
+        // Check the selected answer
+        function checkAnswer(selectedValue, button) {
+          // Stop timer
+          clearInterval(state.timer);
+
+          // Record time used
+          state.timeUsed.push(state.timePerQuestion - state.currentTime);
+
+          // Disable all buttons to prevent multiple answers
+          document.querySelectorAll(".option-btn").forEach((btn) => {
+            btn.disabled = true;
+          });
+
+          if (parseInt(selectedValue) === state.correctAnswer) {
+            // Correct answer
+            button.classList.add("correct");
+            state.score += 10;
+            state.correctAnswers++;
+
+            // Create confetti effect
+            createConfetti();
+          } else {
+            // Wrong answer
+            button.classList.add("wrong");
+
+            // Highlight correct answer
+            document.querySelectorAll(".option-btn").forEach((btn) => {
+              if (parseInt(btn.dataset.value) === state.correctAnswer) {
+                btn.classList.add("correct");
+              }
+            });
+          }
+
+          updateScore();
+          nextBtn.disabled = false;
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+          const colors = [
+            "#f72585",
+            "#4361ee",
+            "#4cc9f0",
+            "#f9c74f",
+            "#56ab2f",
+          ];
+          const container = document.querySelector(".game-container");
+
+          for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.backgroundColor =
+              colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.width = `${Math.random() * 8 + 4}px`;
+            confetti.style.height = `${Math.random() * 8 + 4}px`;
+            confetti.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
+
+            container.appendChild(confetti);
+
+            // Remove confetti after animation completes
+            setTimeout(() => {
+              if (confetti.parentNode) {
+                confetti.parentNode.removeChild(confetti);
+              }
+            }, 4000);
+          }
+        }
+
+        // Update score display
+        function updateScore() {
+          correctCountSpan.textContent = state.correctAnswers;
+          scoreSpan.textContent = state.score;
+        }
+
+        // Move to the next question
+        function nextQuestion() {
+          state.currentQuestion++;
+
+          if (state.currentQuestion > state.totalQuestions) {
+            endGame();
+          } else {
+            generateQuestion();
+          }
+        }
+
+        // End the game and show results
+        function endGame() {
+          // Calculate average time
+          const totalTime = state.timeUsed.reduce((a, b) => a + b, 0);
+          state.avgTime = (totalTime / state.timeUsed.length).toFixed(1);
+
+          showScreen(resultScreen);
+
+          completedTableSpan.textContent =
+            state.currentTable === "random" ? "Random" : state.currentTable;
+          completedLevelSpan.textContent = state.gradeName;
+          finalScoreSpan.textContent = state.score;
+          finalCorrectSpan.textContent = state.correctAnswers;
+          avgTimeSpan.textContent = state.avgTime;
+
+          // Calculate stars (1 star per 2 correct answers)
+          const stars = document.querySelectorAll(".star");
+          const starCount = Math.min(5, Math.ceil(state.correctAnswers / 2));
+
+          stars.forEach((star, index) => {
+            if (index < starCount) {
+              star.classList.add("animate-bounce");
+              star.style.animationDelay = `${index * 0.2}s`;
+            } else {
+              star.style.opacity = "0.3";
+            }
+          });
+        }
+
+        // Initialize with a default selection
+        setTimeout(() => {
+          document.querySelector('.level-card[data-level="0"]').click();
+          document
+            .querySelector('.table-btn[data-table="5"]')
+            .classList.add("selected");
+        }, 100);
+      });
     </script>
-</body>
+    
+    <script src="page-protector.js"></script>
+  </body>
 </html>
