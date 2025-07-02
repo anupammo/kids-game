@@ -199,7 +199,7 @@ class PageProtector {
         this.statusIndicator.style.position = 'fixed';
         this.statusIndicator.style.bottom = '10px';
         this.statusIndicator.style.right = '10px';
-        this.statusIndicator.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this.statusIndicator.style.backgroundColor = 'rgba(255, 255, 255, 0)';
         this.statusIndicator.style.color = 'white';
         this.statusIndicator.style.padding = '5px 10px';
         this.statusIndicator.style.borderRadius = '5px';

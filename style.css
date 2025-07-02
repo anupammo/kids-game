@@ -389,6 +389,10 @@ header p {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+i.fa-shield-alt {
+  color: #56ab2f;
+}
+
 @media (max-width: 768px) {
   .game-container {
     padding: 1.5rem;
