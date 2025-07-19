@@ -319,7 +319,7 @@ header p {
 
 .star {
   color: gold;
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   margin: 0 3px;
   text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
 }
@@ -384,7 +384,7 @@ header p {
   background: #f8f9fa;
   border-radius: 15px;
   padding: 1.5rem;
-  max-width: 400px;
+  max-width: 320px;
   margin: 1rem auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -432,9 +432,9 @@ i.fa-shield-alt {
     padding: 1.2rem;
   }
 
-  .options-container {
+  /* .options-container {
     grid-template-columns: 1fr;
-  }
+  } */
 
   .timer-container {
     width: 50px;
