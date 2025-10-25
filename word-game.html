@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Wizards - Fun Spelling Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6ecbf5, #ff9de3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background-color: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-title {
+            color: #ff6b6b;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 #ffd166;
+        }
+        
+        .game-subtitle {
+            color: #06d6a0;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+        
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: #ffd166;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 0 #ffb703;
+        }
+        
+        .score-box {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .score-label {
+            font-size: 1rem;
+            color: #333;
+        }
+        
+        .score-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ef476f;
+        }
+        
+        .game-area {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .word-display {
+            font-size: 3rem;
+            color: #118ab2;
+            margin-bottom: 20px;
+            letter-spacing: 8px;
+            text-shadow: 2px 2px 0 #caf0f8;
+        }
+        
+        .word-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            border: 3px solid #06d6a0;
+            border-radius: 12px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 15px;
+        }
+        
+        .word-input:focus {
+            border-color: #118ab2;
+            box-shadow: 0 0 10px rgba(17, 138, 178, 0.3);
+        }
+        
+        .feedback {
+            min-height: 30px;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .correct {
+            color: #06d6a0;
+        }
+        
+        .incorrect {
+            color: #ef476f;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .game-btn {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        
+        .check-btn {
+            background-color: #06d6a0;
+            color: white;
+        }
+        
+        .hint-btn {
+            background-color: #ffd166;
+            color: #333;
+        }
+        
+        .new-game-btn {
+            background-color: #118ab2;
+            color: white;
+        }
+        
+        .share-section {
+            background-color: #f1faee;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-title {
+            color: #1d3557;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .social-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .facebook {
+            background-color: #3b5998;
+        }
+        
+        .twitter {
+            background-color: #1da1f2;
+        }
+        
+        .whatsapp {
+            background-color: #25d366;
+        }
+        
+        .game-instructions {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: left;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .game-instructions h3 {
+            color: #118ab2;
+            margin-bottom: 10px;
+        }
+        
+        .game-instructions ul {
+            margin-left: 20px;
+        }
+        
+        .game-instructions li {
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 500px) {
+            .game-title {
+                font-size: 2.2rem;
+            }
+            
+            .word-display {
+                font-size: 2.2rem;
+                letter-spacing: 5px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+            }
+            
+            .social-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">Word Wizards</h1>
+        <p class="game-subtitle">Spell the words correctly to earn points!</p>
+        
+        <div class="score-container">
+            <div class="score-box">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="score-box">
+                <div class="score-label">Time Left</div>
+                <div class="score-value" id="timer">60</div>
+            </div>
+            <div class="score-box">
+                <div class="score-label">Words</div>
+                <div class="score-value" id="word-count">0</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="word-display" id="word-display">WORD</div>
+            <input type="text" class="word-input" id="word-input" placeholder="Type the word here..." autocomplete="off">
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="buttons-container">
+                <button class="game-btn check-btn" id="check-btn">Check</button>
+                <button class="game-btn hint-btn" id="hint-btn">Hint</button>
+                <button class="game-btn new-game-btn" id="new-game-btn">New Game</button>
+            </div>
+        </div>
+        
+        <div class="share-section">
+            <h3 class="share-title">Share Your Score!</h3>
+            <div class="social-buttons">
+                <div class="social-btn facebook" id="facebook-share">
+                    <span>Facebook</span>
+                </div>
+                <div class="social-btn twitter" id="twitter-share">
+                    <span>Twitter</span>
+                </div>
+                <div class="social-btn whatsapp" id="whatsapp-share">
+                    <span>WhatsApp</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            <h3>How to Play:</h3>
+            <ul>
+                <li>Type the word shown above in the input box</li>
+                <li>Click "Check" or press Enter to check your spelling</li>
+                <li>Get 10 points for each correct word</li>
+                <li>Use "Hint" if you need help (costs 5 points)</li>
+                <li>Try to spell as many words as you can before time runs out!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let score = 0;
+        let timer = 60;
+        let wordCount = 0;
+        let currentWord = '';
+        let timerInterval;
+        let gameActive = false;
+        
+        // DOM elements
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const wordCountElement = document.getElementById('word-count');
+        const wordDisplayElement = document.getElementById('word-display');
+        const wordInputElement = document.getElementById('word-input');
+        const feedbackElement = document.getElementById('feedback');
+        const checkButton = document.getElementById('check-btn');
+        const hintButton = document.getElementById('hint-btn');
+        const newGameButton = document.getElementById('new-game-btn');
+        const facebookShare = document.getElementById('facebook-share');
+        const twitterShare = document.getElementById('twitter-share');
+        const whatsappShare = document.getElementById('whatsapp-share');
+        
+        // Word list for primary students
+        const wordList = [
+            'apple', 'ball', 'cat', 'dog', 'elephant', 'fish', 'giraffe', 'house', 'ice', 'jump',
+            'kite', 'lion', 'monkey', 'nest', 'orange', 'pencil', 'queen', 'rabbit', 'sun', 'tree',
+            'umbrella', 'violin', 'water', 'xylophone', 'yellow', 'zebra', 'bird', 'car', 'door',
+            'egg', 'flower', 'green', 'hat', 'igloo', 'jacket', 'king', 'leaf', 'moon', 'nose',
+            'octopus', 'pizza', 'quilt', 'rain', 'star', 'table', 'up', 'van', 'window', 'box'
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            score = 0;
+            timer = 60;
+            wordCount = 0;
+            gameActive = true;
+            
+            updateScore();
+            updateTimer();
+            updateWordCount();
+            
+            // Clear feedback
+            feedbackElement.textContent = '';
+            feedbackElement.className = 'feedback';
+            
+            // Focus on input
+            wordInputElement.value = '';
+            wordInputElement.focus();
+            
+            // Start timer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateGameTimer, 1000);
+            
+            // Get first word
+            getNewWord();
+        }
+        
+        // Update score display
+        function updateScore() {
+            scoreElement.textContent = score;
+        }
+        
+        // Update timer display
+        function updateTimer() {
+            timerElement.textContent = timer;
+        }
+        
+        // Update word count display
+        function updateWordCount() {
+            wordCountElement.textContent = wordCount;
+        }
+        
+        // Update game timer
+        function updateGameTimer() {
+            if (timer > 0) {
+                timer--;
+                updateTimer();
+                
+                // Change timer color when time is running low
+                if (timer <= 10) {
+                    timerElement.style.color = '#ef476f';
+                }
+            } else {
+                endGame();
+            }
+        }
+        
+        // Get a new random word
+        function getNewWord() {
+            const randomIndex = Math.floor(Math.random() * wordList.length);
+            currentWord = wordList[randomIndex];
+            wordDisplayElement.textContent = currentWord.toUpperCase();
+        }
+        
+        // Check the user's input
+        function checkWord() {
+            if (!gameActive) return;
+            
+            const userInput = wordInputElement.value.trim().toLowerCase();
+            
+            if (userInput === currentWord) {
+                // Correct word
+                score += 10;
+                wordCount++;
+                feedbackElement.textContent = 'Correct! +10 points';
+                feedbackElement.className = 'feedback correct';
+            } else {
+                // Incorrect word
+                feedbackElement.textContent = 'Try again!';
+                feedbackElement.className = 'feedback incorrect';
+            }
+            
+            updateScore();
+            updateWordCount();
+            
+            // Get new word and clear input
+            getNewWord();
+            wordInputElement.value = '';
+            wordInputElement.focus();
+        }
+        
+        // Provide a hint
+        function giveHint() {
+            if (!gameActive || score < 5) {
+                feedbackElement.textContent = 'Not enough points for a hint!';
+                feedbackElement.className = 'feedback incorrect';
+                return;
+            }
+            
+            score -= 5;
+            updateScore();
+            
+            // Show first and last letter as hint
+            const hint = currentWord[0] + ' _ '.repeat(currentWord.length - 2) + currentWord[currentWord.length - 1];
+            feedbackElement.textContent = `Hint: ${hint}`;
+            feedbackElement.className = 'feedback correct';
+            
+            wordInputElement.focus();
+        }
+        
+        // End the game
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            
+            feedbackElement.textContent = `Game Over! Final Score: ${score}`;
+            feedbackElement.className = 'feedback';
+            
+            wordDisplayElement.textContent = 'GAME OVER';
+            wordInputElement.disabled = true;
+        }
+        
+        // Share score on social media
+        function shareScore(platform) {
+            const shareText = `I scored ${score} points in Word Wizards! Can you beat my score?`;
+            const shareUrl = window.location.href;
+            
+            let shareLink = '';
+            
+            switch(platform) {
+                case 'facebook':
+                    shareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+                    break;
+                case 'twitter':
+                    shareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+                    break;
+                case 'whatsapp':
+                    shareLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+                    break;
+            }
+            
+            window.open(shareLink, '_blank', 'width=600,height=400');
+        }
+        
+        // Event listeners
+        checkButton.addEventListener('click', checkWord);
+        
+        hintButton.addEventListener('click', giveHint);
+        
+        newGameButton.addEventListener('click', initGame);
+        
+        wordInputElement.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                checkWord();
+            }
+        });
+        
+        facebookShare.addEventListener('click', () => shareScore('facebook'));
+        twitterShare.addEventListener('click', () => shareScore('twitter'));
+        whatsappShare.addEventListener('click', () => shareScore('whatsapp'));
+        
+        // Start the game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>
